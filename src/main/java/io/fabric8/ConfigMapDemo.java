@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * Creates and edits a configMap
  */
 public class ConfigMapDemo {
-	private static final Logger logger = Logger.getLogger(DeploymentDemo.class
+	private static final Logger logger = Logger.getLogger(ConfigMapDemo.class
 			.getName());
 
 	public static void main(String args[]) {

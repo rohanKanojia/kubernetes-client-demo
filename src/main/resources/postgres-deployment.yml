@@ -1,0 +1,44 @@
+apiVersion: "extensions/v1beta1"
+kind: "Deployment"
+metadata:
+  annotations: {}
+  finalizers: []
+  labels: {}
+  name: "deployment2"
+  ownerReferences: []
+spec:
+  replicas: 2
+  template:
+    metadata:
+      annotations: {}
+      finalizers: []
+      labels:
+        app: "database"
+        dbtype: "postgres"
+      ownerReferences: []
+    spec:
+      containers:
+      - args: []
+        command: []
+        env:
+        - name: "POSTGRESQL_DATABASE"
+          value: "foodb"
+        - name: "POSTGRESQL_USER"
+          value: "luke"
+        - name: "POSTGRESQL_PASSWORD"
+          value: "password"
+        - name: "POSTGRESQL_ADMIN_PASSWORD"
+          value: "password"
+        envFrom: []
+        image: "centos/postgresql-96-centos7"
+        name: "postgres"
+        ports:
+        - containerPort: 5432
+        volumeMounts: []
+      hostAliases: []
+      imagePullSecrets: []
+      initContainers: []
+      nodeSelector: {}
+      tolerations: []
+      volumes: []
+

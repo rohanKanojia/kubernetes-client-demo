@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * Creates Kubernetes Client and queries for all namespaces in cluster.
  */
 public class ClientDemo {
-	private static final Logger logger = Logger.getLogger(DeploymentDemo.class
+	private static final Logger logger = Logger.getLogger(ClientDemo.class
 			.getName());
 
 	public static void main(String args[]) {
@@ -21,19 +21,18 @@ public class ClientDemo {
 		try {
 
 			logger.log(Level.INFO, "Creating Kuberntes client");
-			
+
 			KubernetesClient client = new DefaultKubernetesClient();
-			
+
 			logger.log(Level.INFO, "Kubernetes client successfully created");
-			
-			
+
 			/**
 			 * List all the namespaces.
 			 */
 			NamespaceList aList = client.namespaces().list();
-			for(Namespace aNamespace : aList.getItems())
+			for (Namespace aNamespace : aList.getItems())
 				logger.log(Level.INFO, aNamespace.getMetadata().getName());
-			
+
 			client.close();
 		} catch (KubernetesClientException aException) {
 			logger.log(Level.SEVERE, "Problem encountered in Kubernetes Client");
