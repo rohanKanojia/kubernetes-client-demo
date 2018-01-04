@@ -10,6 +10,9 @@ import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 
+/*
+ * Spins up simple pods using PodBuilder() and yaml files on cluster
+ */
 public class PodDemo {
 	private static final Logger logger = Logger.getLogger(PodDemo.class
 			.getName());
