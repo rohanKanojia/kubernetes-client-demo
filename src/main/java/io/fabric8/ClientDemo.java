@@ -9,6 +9,9 @@ import io.fabric8.kubernetes.client.KubernetesClientException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/*
+ * Creates Kubernetes Client and queries for all namespaces in cluster.
+ */
 public class ClientDemo {
 	private static final Logger logger = Logger.getLogger(DeploymentDemo.class
 			.getName());

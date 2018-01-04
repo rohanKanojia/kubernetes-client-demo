@@ -1,6 +1,7 @@
 package io.fabric8;
 
 import java.io.FileInputStream;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

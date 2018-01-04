@@ -3,6 +3,8 @@ package io.fabric8;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.extensions.Deployment;
 import io.fabric8.kubernetes.api.model.extensions.DeploymentBuilder;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
@@ -10,7 +12,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 
 /*
- * Deploys a basic MySQL container on Cluster.
+ * Deploys a basic MySQL container on Cluster and reads logs from it.
  */
 public class DeploymentDemo {
 	private static final Logger logger = Logger.getLogger(DeploymentDemo.class.getName());
@@ -39,10 +41,22 @@ public class DeploymentDemo {
 			client.extensions().deployments().inNamespace(namespace).create(deployment1);
 			logger.log(Level.INFO, "Deployment created..OK");
 			
+			// Wait for Deployment to come up
+			Thread.sleep(10 * 1000);
+			
+			// Get Deployment pod.
+			Pod aDeploymentPod = client.pods().inNamespace(namespace).withLabel("category", "deploymentDemo").list().getItems().get(0);
+			
+			// Get logs from running pod:
+			String podLog = client.pods().inNamespace(namespace).withName(aDeploymentPod.getMetadata().getName()).getLog();
+			logger.log(Level.INFO, "Pod Logs: " + podLog);
+			
 			client.close();
-		} catch (KubernetesClientException aException) {
+		} catch (KubernetesClientException exception1) {
 			logger.log(Level.SEVERE, "An exception related to Kubernetes encountered");
-			aException.printStackTrace();
+			exception1.printStackTrace();
+		} catch (InterruptedException exception2) {
+			
 		}
 	}
 }
