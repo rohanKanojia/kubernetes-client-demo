@@ -16,7 +16,7 @@ public class ConfigMapDemo {
 	private static final Logger logger = Logger.getLogger(ConfigMapDemo.class
 			.getName());
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws InterruptedException {
 		String namespace = "default";
 		try {
 			final KubernetesClient client = new DefaultKubernetesClient();
@@ -24,6 +24,7 @@ public class ConfigMapDemo {
 					.withName("configmap1").endMetadata().addToData("one", "1")
 					.addToData("two", "2").addToData("three", "3").build();
 
+			Thread.sleep(10 * 1000);
 			logger.log(Level.INFO, "Creating config map");
 			client.configMaps().inNamespace(namespace).create(configMap1);
 			logger.log(Level.INFO, "OK .. ConfigMap successfully created");
