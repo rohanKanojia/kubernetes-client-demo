@@ -1,9 +1,11 @@
 package io.fabric8;
 
+import io.fabric8.kubernetes.api.model.KubernetesList;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
+import io.fabric8.kubernetes.client.internal.readiness.Readiness;
 import io.fabric8.openshift.api.model.Template;
 import io.fabric8.openshift.client.DefaultOpenShiftClient;
 import io.fabric8.openshift.client.OpenShiftClient;
@@ -32,25 +34,24 @@ public class TemplateDemo {
 			openshiftClient.templates().inNamespace(namespace).create(template);
 			logger.log(Level.INFO, "Created template");
 
-			openshiftClient.templates().inNamespace(namespace)
+			KubernetesList resourceList = openshiftClient.templates().inNamespace(namespace)
 					.withName(template.getMetadata().getName()).process();
-			logger.log(Level.INFO, "processed template");
+			logger.log(Level.INFO, "processed template, resource list size : " + resourceList.getItems().size());
+			
+			openshiftClient.lists().inNamespace(namespace).create(resourceList);
 			
 			final CountDownLatch latch = new CountDownLatch(1);
-			Watch watch = openshiftClient.pods().inNamespace(namespace).watch(new Watcher<Pod>() {
+			Watch watch = openshiftClient.pods().inNamespace(namespace).withLabel("name", "wordpress-mysql-example").watch(new Watcher<Pod>() {
 				public void eventReceived(
-						io.fabric8.kubernetes.client.Watcher.Action action,
-						Pod arg1) {
-					logger.log(Level.INFO, "pod : " + arg1.getMetadata().getName());
-					if(action.equals(Action.MODIFIED)) {
+						io.fabric8.kubernetes.client.Watcher.Action action, Pod pod) {
+					logger.log(Level.INFO, "pod : " + pod.getMetadata().getName());
+					if(Readiness.isReady(pod)) {
 						latch.countDown();
 					}
-					
 				}
 
 				public void onClose(KubernetesClientException arg0) {
 					// TODO Auto-generated method stub
-					
 				}
 			});
 			
