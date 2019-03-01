@@ -18,12 +18,12 @@
 		<dependency>
 			<groupId>io.fabric8</groupId>
 			<artifactId>kubernetes-client</artifactId>
-			<version>3.1.7</version>
+			<version>4.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>io.fabric8</groupId>
 			<artifactId>openshift-client</artifactId>
-			<version>3.1.7</version>
+			<version>4.1.2</version>
 		</dependency>
 
 		<dependency>
