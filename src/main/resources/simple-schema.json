@@ -1,0 +1,17 @@
+{
+  "properties": {
+    "spec": {
+      "properties": {
+        "cronSpec": {
+          "type": "string",
+          "pattern": "^(\\d+|\\*)(/\\d+)?(\\s+(\\d+|\\*)(/\\d+)?){4}$"
+        },
+        "replicas": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        }
+      }
+    }
+  }
+}
