@@ -1,0 +1,38 @@
+apiVersion: sparkoperator.k8s.io/v1beta1
+kind: SparkApplication
+metadata:
+  name: spark-mssql-job
+  namespace: default
+spec:
+  type: Scala
+  image: gcr.io/spark-operator/spark:v2.4.0-gcs-prometheus
+  imagePullPolicy: Always
+  sparkVersion: 2.4.3
+  mainClass: mssql_job.SparkMssqlJob
+  mainApplicationFile: local:///tmp/spark_job.jar
+  mode: cluster
+  driver:
+    coreLimit: 1000m
+    cores: 0.1
+    labels:
+      version: 2.4.0
+    memory: 1024m
+    serviceAccount: default
+    volumeMounts:
+      - name: app-config
+        mountPath: /tmp
+  executor:
+    cores: 1
+    instances: 1
+    labels:
+      version: 2.4.0
+    memory: 1024m
+    volumeMounts:
+      - name: app-config
+        mountPath: /tmp
+  monitoring:
+    exposeDriverMetrics: true
+    exposeExecutorMetrics: true
+    prometheus:
+      jmxExporterJar: "/prometheus/jmx_prometheus_javaagent-0.3.1.jar"
+      port: 8090
