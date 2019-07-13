@@ -23,50 +23,28 @@ public class CustomResourceSchemaValidation {
 
             CustomResourceDefinitionBuilder builder = new CustomResourceDefinitionBuilder()
                     .withApiVersion("apiextensions.k8s.io/v1beta1")
-                    .withNewMetadata().withName("crontabs.stable.example.com").endMetadata()
+                    .withNewMetadata().withName("sparkclusters.radanalytics.io")
+                    .endMetadata()
                     .withNewSpec()
-                    .withGroup("stable.example.com")
+                    .withNewNames()
+                    .withKind("SparkCluster")
+                    .withPlural("sparkclusters")
+                    .endNames()
+                    .withGroup("radanalytics.io")
                     .withVersion("v1")
                     .withScope("Namespaced")
-                    .withNewNames()
-                    .withPlural("crontabs")
-                    .withSingular("crontab")
-                    .withKind("CronTab")
-                    .addToShortNames("ct")
-                    .endNames()
                     .withNewValidation()
                     .withNewOpenAPIV3SchemaLike(schema)
                     .endOpenAPIV3Schema()
                     .endValidation()
                     .endSpec();
 
-            CustomResourceDefinition crd = builder.build();
-            crd.getSpec().getValidation().getOpenAPIV3Schema().setDependencies(null);
-            new DefaultKubernetesClient().customResourceDefinitions().create(builder.build());
-            System.out.println(schema.toString());
-//            CustomResourceDefinitionBuilder builder = new CustomResourceDefinitionBuilder()
-//                    .withApiVersion("apiextensions.k8s.io/v1beta1")
-//                    .withNewMetadata().withName("sparkclusters.radanalytics.io")
-//                    .endMetadata()
-//                    .withNewSpec()
-//                    .withNewNames()
-//                    .withKind("SparkCluster")
-//                    .withPlural("sparkclusters")
-//                    .endNames()
-//                    .withGroup("radanalytics.io")
-//                    .withVersion("v1")
-//                    .withScope("Namespaced")
-//                    .withNewValidation()
-//                    .withNewOpenAPIV3SchemaLike(schema)
-//                    .endOpenAPIV3Schema()
-//                    .endValidation()
-//                    .endSpec();
-//
-//            new DefaultKubernetesClient().customResourceDefinitions().createOrReplace(builder.build());
+            CustomResourceDefinition sparkCrd = builder.build();
+            new DefaultKubernetesClient().customResourceDefinitions().createOrReplace(sparkCrd);
 
-//            KubernetesClient client2 = new DefaultKubernetesClient();
-//            CustomResourceDefinition crd2 = client.customResourceDefinitions().load(CustomResourceSchemaValidation.class.getResourceAsStream("/my-custom-resource-file.yml")).get();
-//            client.customResourceDefinitions().create(crd2);
+            KubernetesClient client2 = new DefaultKubernetesClient();
+            CustomResourceDefinition crd2 = client.customResourceDefinitions().load(CustomResourceSchemaValidation.class.getResourceAsStream("/my-custom-resource-file.yml")).get();
+            client.customResourceDefinitions().create(crd2);
 
 
 
@@ -77,8 +55,7 @@ public class CustomResourceSchemaValidation {
     public static JSONSchemaProps readSchema() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        URL in = CustomResourceSchemaValidation.class.getResource("/simple-schema.json");
-//        URL in = CustomResourceSchemaValidation.class.getResource("/sparkCluster.json");
+        URL in = CustomResourceSchemaValidation.class.getResource("/sparkCluster.json");
         if (null == in) {
             return null;
         }

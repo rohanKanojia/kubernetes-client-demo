@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class SparkApplicationCustomResource {
-    private static final Logger logger = Logger.getLogger(CustomResourceDemo.class.getName());
+    private static final Logger logger = Logger.getLogger(SparkApplicationCustomResource.class.getName());
 
     public static void main(String args[]) throws IOException {
 
