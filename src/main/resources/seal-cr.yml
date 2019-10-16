@@ -1,0 +1,7 @@
+apiVersion: jungle.example.com/v1
+kind: Animal
+metadata:
+  name: seal
+  namespace: default
+spec:
+  image: my-silly-seal-image
