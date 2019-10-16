@@ -39,14 +39,15 @@ public class CustomResourceSchemaValidation {
                     .endValidation()
                     .endSpec();
 
-            CustomResourceDefinition sparkCrd = builder.build();
-            new DefaultKubernetesClient().customResourceDefinitions().createOrReplace(sparkCrd);
+//            CustomResourceDefinition sparkCrd = builder.build();
+//            client.customResourceDefinitions().createOrReplace(sparkCrd);
 
-            KubernetesClient client2 = new DefaultKubernetesClient();
-            CustomResourceDefinition crd2 = client.customResourceDefinitions().load(CustomResourceSchemaValidation.class.getResourceAsStream("/my-custom-resource-file.yml")).get();
-            client.customResourceDefinitions().create(crd2);
-
-
+//            CustomResourceDefinition crd = client.customResourceDefinitions()
+//                    .load(CustomResourceSchemaValidation.class.getResourceAsStream("/my-custom-resource-file.yml")).get();
+//            client.customResourceDefinitions().create(crd);
+              CustomResourceDefinition crd = client.customResourceDefinitions()
+                    .load(CustomResourceSchemaValidation.class.getResourceAsStream("/sparkclusters-radanalytics-crd.yml")).get();
+              client.customResourceDefinitions().create(crd);
 
         }
     }
