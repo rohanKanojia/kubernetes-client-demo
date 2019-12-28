@@ -52,7 +52,7 @@ public class CustomResourceSchemaValidation {
 //        } while (client.customResourceDefinitions().list()
 //                .getItems()
 //                .stream()
-//                .anyMatch(crd -> crd.getMetadata().getName().contains("somethings")));
+//                .anyMatch(io.fabric8.crd -> io.fabric8.crd.getMetadata().getName().contains("somethings")));
 
         client.customResourceDefinitions().createOrReplace(customResourceDefinition);
         logger.log(Level.INFO, "CRD created once");

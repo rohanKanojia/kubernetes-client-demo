@@ -1,0 +1,22 @@
+{
+  "apiVersion": "stable.example.com/v1",
+  "kind": "CronTab",
+  "metadata": {
+    "creationTimestamp": "2019-12-23T17:38:23Z",
+    "generation": 1,
+    "name": "my-new-cron-object",
+    "namespace": "default",
+    "resourceVersion": "68873",
+    "selfLink": "/apis/stable.example.com/v1/namespaces/default/crontabs/my-new-cron-object",
+    "uid": "4be81f0c-d642-4cdd-9ef5-27dd0b880b71"
+  },
+  "spec": {
+    "cronSpec": "* * * * */5",
+    "image": "my-awesome-cron-image",
+    "replicas": 3
+  },
+  "status": {
+    "labelSelector": "foobar",
+    "replicas": 4
+  }
+}
