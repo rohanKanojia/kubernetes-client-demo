@@ -14,18 +14,31 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+                <version.fabric8.client>4.7.0</version.fabric8.client>
 	</properties>
+
+        <dependencyManagement>
+          <dependencies>
+            <dependency>
+              <groupId>io.fabric8</groupId>
+              <artifactId>kubernetes-client-bom</artifactId>
+              <version>${version.fabric8.client}</version>
+              <scope>import</scope>
+              <type>pom</type>
+            </dependency>
+          </dependencies>
+        </dependencyManagement>
 
 	<dependencies>
 		<dependency>
 			<groupId>io.fabric8</groupId>
 			<artifactId>kubernetes-client</artifactId>
-			<version>4.7-SNAPSHOT</version>
+			<version>${version.fabric8.client}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.fabric8</groupId>
 			<artifactId>openshift-client</artifactId>
-			<version>4.7-SNAPSHOT</version>
+			<version>${version.fabric8.client}</version>
 		</dependency>
 
 		<dependency>
