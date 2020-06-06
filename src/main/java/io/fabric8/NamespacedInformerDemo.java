@@ -4,6 +4,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.dsl.base.OperationContext;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer;
 import io.fabric8.kubernetes.client.informers.SharedInformerFactory;
@@ -19,6 +20,7 @@ public class NamespacedInformerDemo {
             SharedIndexInformer<Pod> podInformer = sharedInformerFactory.sharedIndexInformerFor(
                     Pod.class,
                     PodList.class,
+                    new OperationContext().withNamespace("default"),
                     30 * 1000L);
             logger.info("Informer factory initialized.");
 
@@ -38,14 +40,14 @@ public class NamespacedInformerDemo {
                         public void onDelete(Pod pod, boolean deletedFinalStateUnknown) {
                             logger.info("Pod " + pod.getMetadata().getName() + " got deleted");
                         }
-                    }
-            );
+                    });
 
             logger.info("Starting all registered informers");
             sharedInformerFactory.startAllRegisteredInformers();
 
             // Wait for 1 minute
-            Thread.sleep(60 * 1000L);
+            Thread.sleep(15 * 60 * 1000L);
+            sharedInformerFactory.stopAllRegisteredInformers();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             e.printStackTrace();
