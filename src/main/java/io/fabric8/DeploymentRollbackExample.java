@@ -18,12 +18,12 @@ public class DeploymentRollbackExample {
     public static void main(String args[]) {
         try {
             KubernetesClient client = new DefaultKubernetesClient();
-//            Status status = client.apps().deployments().inNamespace("rokumar")
-//                    .withName("nginx-deployment")
-//                    .rollback(new DeploymentRollbackBuilder()
-//                            .withName("nginx-deployment")
-//                            .withNewRollbackTo(2l).build());
-//            logger.log(Level.INFO, status.toString());
+            Status status = client.apps().deployments().inNamespace("rokumar")
+                    .withName("nginx-deployment")
+                    .rollback(new DeploymentRollbackBuilder()
+                            .withName("nginx-deployment")
+                            .withNewRollbackTo(2l).build());
+            logger.log(Level.INFO, status.toString());
             client.close();
         } catch (KubernetesClientException aException) {
             logger.log(Level.SEVERE, "Problem encountered in Kubernetes Client");

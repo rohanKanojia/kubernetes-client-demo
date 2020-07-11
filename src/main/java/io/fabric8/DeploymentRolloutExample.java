@@ -20,69 +20,15 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.Map;
-
 public class DeploymentRolloutExample {
   private static final Logger logger = LoggerFactory.getLogger(DeploymentRolloutExample.class);
 
   public static void main(String[] args) {
     try (KubernetesClient client = new DefaultKubernetesClient()) {
-      updateImage(client);
-      restart(client);
-      pause(client);
-      resume(client);
-      undo(client);
-      updateImage(client, Collections.singletonMap("nginx", "nginx:perl"));
-      System.exit(0);
+      client.apps().deployments().inNamespace("default")
+              .withName("nginx-deployment")
+              .rolling().updateImage("nginx:latest");
+      logger.info("Deployment rolled out");
     }
-  }
-
-  private static void updateImage(KubernetesClient client) {
-    client.apps().deployments()
-      .inNamespace("default")
-      .withName("nginx-deployment")
-      .rolling()
-      .updateImage("nginx:1.19");
-  }
-
-  private static void updateImage(KubernetesClient client, Map<String, String> params) {
-    client.apps().deployments()
-      .inNamespace("default")
-      .withName("nginx-deployment")
-      .rolling()
-      .updateImage(params);
-  }
-
-  private static void restart(KubernetesClient client) {
-    client.apps().deployments()
-      .inNamespace("default")
-      .withName("nginx-deployment")
-      .rolling()
-      .restart();
-  }
-
-  private static void pause(KubernetesClient client) {
-    client.apps().deployments()
-      .inNamespace("default")
-      .withName("nginx-deployment")
-      .rolling()
-      .pause();
-  }
-
-  private static void resume(KubernetesClient client) {
-    client.apps().deployments()
-      .inNamespace("default")
-      .withName("nginx-deployment")
-      .rolling()
-      .resume();
-  }
-
-  private static void undo(KubernetesClient client) {
-    client.apps().deployments()
-      .inNamespace("default")
-      .withName("nginx-deployment")
-      .rolling()
-      .undo();
   }
 }
