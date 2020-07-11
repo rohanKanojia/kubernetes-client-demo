@@ -16,10 +16,9 @@ import io.fabric8.kubernetes.client.KubernetesClientException;
 public class DeploymentDemo {
 	private static final Logger logger = Logger.getLogger(DeploymentDemo.class.getName());
 	
-	public static void main(String args[]) {
-		try {
+	public static void main(String[] args) {
+		try (final KubernetesClient client = new DefaultKubernetesClient()) {
 			String namespace = "default";
-			final KubernetesClient client = new DefaultKubernetesClient();
 			Deployment deployment1 = new DeploymentBuilder().withNewMetadata()
 					.withName("deployment1").endMetadata().withNewSpec()
 					.withReplicas(1).withNewTemplate().withNewMetadata()
@@ -37,7 +36,7 @@ public class DeploymentDemo {
 					.endTemplate().endSpec().build();
 			
 			logger.log(Level.INFO, "Creating deployment ....");
-			client.extensions().deployments().inNamespace(namespace).create(deployment1);
+			client.apps().deployments().inNamespace(namespace).create(deployment1);
 			logger.log(Level.INFO, "Deployment created..OK");
 			
 			// Wait for Deployment to come up
@@ -49,13 +48,11 @@ public class DeploymentDemo {
 			// Get logs from running pod:
 			String podLog = client.pods().inNamespace(namespace).withName(aDeploymentPod.getMetadata().getName()).getLog();
 			logger.log(Level.INFO, "Pod Logs: " + podLog);
-			
-			client.close();
 		} catch (KubernetesClientException exception1) {
 			logger.log(Level.SEVERE, "An exception related to Kubernetes encountered");
 			exception1.printStackTrace();
 		} catch (InterruptedException exception2) {
-			
+			Thread.currentThread().interrupt();
 		}
 	}
 }
