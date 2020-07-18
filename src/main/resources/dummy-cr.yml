@@ -1,0 +1,7 @@
+apiVersion: demo.fabric8.io/v1
+kind: Dummy
+metadata:
+  name: first-dummy
+spec:
+  foo: first
+  bar: dummy
