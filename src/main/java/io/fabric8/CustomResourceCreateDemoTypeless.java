@@ -5,18 +5,10 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class CustomResourceCreateDemoTypeless {
     public static void main(String[] args) {
-
-
-
-
-
-
-        
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             // Create Custom Resource Context
             CustomResourceDefinitionContext context = new CustomResourceDefinitionContext
@@ -37,6 +29,5 @@ public class CustomResourceCreateDemoTypeless {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

@@ -9,14 +9,6 @@ import io.fabric8.kubernetes.client.Watcher;
 
 public class PodWatchTest {
     public static void main(String[] args) {
-
-
-
-
-
-
-
-
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             Watch watch = client.pods().inNamespace("default").watch(new Watcher<Pod>() {
                 @Override
@@ -36,11 +28,5 @@ public class PodWatchTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        
-
-
-
-
-        
     }
 }

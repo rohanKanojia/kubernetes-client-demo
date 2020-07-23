@@ -9,12 +9,6 @@ import java.util.Collections;
 
 public class SimpleDeploymentCreate {
     public static void main(String[] args) {
-
-
-
-
-
-
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             Deployment deployment = new DeploymentBuilder()
                     .withNewMetadata().withName("nginx-deployment").addToLabels("app", "nginx").endMetadata()
@@ -37,12 +31,6 @@ public class SimpleDeploymentCreate {
                     .build();
 
             client.apps().deployments().inNamespace("rokumar").createOrReplace(deployment);
-
-
-
-
-
-            
         }
     }
 }
