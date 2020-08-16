@@ -1,4 +1,4 @@
-package io.fabric8;
+package io.fabric8.openshift;
 
 import io.fabric8.kubernetes.client.ConfigBuilder;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
@@ -15,7 +15,7 @@ public class OpenshiftClientAdaptDemo {
 
             openShiftClient.projects().list().getItems().forEach(project -> System.out.println(project.getMetadata().getName()));
         } catch (KubernetesClientException e) {
-        } finally {
+            e.printStackTrace();
         }
     }
 }

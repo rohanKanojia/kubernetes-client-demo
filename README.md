@@ -13,3 +13,24 @@ You can load project as maven project in your IDE and can run sample from IDE. Y
 ```
 mvn exec:java -Dexec.mainClass="io.fabric8.DeploymentDemo"
 ```
+
+### `kubectl` to Kubernetes Client Mapping:
+| kubectl                                        | Fabric8 Kubernetes Client                           |
+| ---------------------------------------------- | ------------------------------------- |
+| `kubectl get pods`                             | [PodListTest.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/PodListTest.java) |
+| `kubectl get pods -w`                          | [PodWatch.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/PodWatch.java)       |
+| `kubectl create pods`                          | [PodDemo.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/PodDemo.java)         |
+| `kubectl create svc -f test-svc.yaml`          | [LoadAndCreateService.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/LoadAndCreateService.java) |
+| `kubectl exec`                                 | [ExecDemo.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/ExecDemo.java) |
+| `kubectl delete pod test-pod1`                 | [PodDelete.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/PodDelete.java) |
+| `kubectl create deploy`                        | [DeploymentDemo.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/DeploymentDemo.java) |
+| `kubectl create -f customresource.yaml`        | [CustomResourceCreateDemo.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/CustomResourceCreateDemo.java) |
+| `kubectl create -f customresource.yaml`        | [CustomResourceCreateDemoTypeless.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/CustomResourceCreateDemoTypeless.java) |
+| `kubectl get ns`                               | [NamespaceListDemo.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/NamespaceListDemo.java) |
+| `kubectl create job`                           | [JobCreate.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/JobCreate.java) |
+| `kubectl logs job/pi`                          | [JobFetchLogs.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/JobFetchLogs.java) |
+| `kubectl create -f test-list.yml`              | [CreateOrReplaceResourceList.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/CreateOrReplaceResourceList.java) |
+| `kubectl create -f test-ing.yml`               | [CreateOrReplaceIngress.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/CreateOrReplaceIngress.java) |
+| `kubectl create validatingwebhookconfiguration`| [ValidatingWebhookConfigurationTest.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/ValidatingWebhookConfigurationTest.java) 
+| `kubectl get events`                           | [EventsExample.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/EventsExample.java) |
+| `kubectl top nodes`                            | [TopExample.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/TopExample.java) |

@@ -1,5 +1,6 @@
 package io.fabric8;
 
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,10 +17,9 @@ public class ExecDemo {
 	private static final Logger logger = Logger.getLogger(ExecDemo.class
 			.getName());
 
-	public static void main(String args[]) throws InterruptedException {
-		KubernetesClient client = new DefaultKubernetesClient();
-		String namespace = client.getNamespace();
-		try {
+	public static void main(String[] args) throws InterruptedException {
+		try (KubernetesClient client = new DefaultKubernetesClient()) {
+			String namespace = "default";
 			Pod pod1 = new PodBuilder().withNewMetadata().withName("pod1")
 					.endMetadata().withNewSpec().addNewContainer()
 					.withName("mysql").withImage("openshift/mysql-55-centos7")
@@ -32,11 +32,11 @@ public class ExecDemo {
 					.withValue("password").endEnv().endContainer().endSpec()
 					.build();
 			
-			client.pods().inNamespace(namespace).create(pod1);
+			client.pods().inNamespace(namespace).createOrReplace(pod1);
 			logger.log(Level.INFO, "created pod");
 
 			logger.log(Level.INFO, "Waiting for the pod to start");
-			Thread.sleep(10 * 1000);
+			client.pods().inNamespace(namespace).withName(pod1.getMetadata().getName()).waitUntilReady(1, TimeUnit.MINUTES);
 
 			logger.log(Level.INFO, "executing a simple command");
 			ExecWatch execWatch = client.pods().inNamespace(namespace)
@@ -45,10 +45,10 @@ public class ExecDemo {
 					.withTTY().usingListener(new SimpleListener()).exec("ls");
 
 			Thread.sleep(10 * 1000);
+			execWatch.close();
 
 			client.pods().inNamespace(namespace).withName("pod1").delete();
 			logger.info("Closing client now...");
-			client.close();
 		} catch (KubernetesClientException exception) {
 			exception.printStackTrace();
 		}

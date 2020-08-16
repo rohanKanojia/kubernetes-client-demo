@@ -1,4 +1,4 @@
-package io.fabric8;
+package io.fabric8.openshift;
 
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.openshift.api.model.Route;
