@@ -15,6 +15,8 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<version.fabric8.client>4.11.1</version.fabric8.client>
+		<commons-codec.version>1.15</commons-codec.version>
+		<commons-compress.version>1.20</commons-compress.version>
 	</properties>
 
 	<dependencyManagement>
@@ -39,6 +41,17 @@
 			<groupId>io.fabric8</groupId>
 			<artifactId>openshift-client</artifactId>
 			<version>${version.fabric8.client}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>${commons-codec.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-compress</artifactId>
+			<version>${commons-compress.version}</version>
 		</dependency>
 
 		<dependency>
