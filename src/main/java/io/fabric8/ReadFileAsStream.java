@@ -16,7 +16,7 @@ public class ReadFileAsStream {
                     .inNamespace("default")
                     .withName("quarkus-84dc4885b-tsck6")
                     .inContainer("quarkus")
-                    .file("/tmp/jobExample.yml").read())  {
+                    .file("/tmp/jobExample.yml").read()) {
                 String result = new BufferedReader(new InputStreamReader(is)).lines().collect(Collectors.joining("\n"));
                 System.out.println(result);
             }
