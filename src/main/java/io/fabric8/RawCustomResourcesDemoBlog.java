@@ -20,7 +20,7 @@ public class RawCustomResourcesDemoBlog {
     private static final Logger logger = Logger.getLogger(RawCustomResourcesDemoBlog.class.getName());
     private static final CountDownLatch closeLatch = new CountDownLatch(1);
 
-    public static void main(String args[]) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         try (final KubernetesClient client = new DefaultKubernetesClient()) {
             String namespace = "default";

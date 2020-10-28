@@ -14,13 +14,12 @@ public class SelfSubjectAccessReviewExample {
                     .withGroup("apps")
                     .withResource("deployments")
                     .withVerb("create")
-                    .withNamespace("dev")
+                    .withNamespace("rokumar")
                     .endResourceAttributes()
                     .endSpec()
                     .build();
 
             ssar = client.authorization().v1().selfSubjectAccessReview().create(ssar);
-            System.out.println(ssar.getStatus().getAllowed());
         }
     }
 }
