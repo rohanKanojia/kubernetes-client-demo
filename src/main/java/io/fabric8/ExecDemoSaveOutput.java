@@ -16,7 +16,7 @@ public class ExecDemoSaveOutput {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             final CountDownLatch execLatch = new CountDownLatch(1);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            ExecWatch execWatch = client.pods().inNamespace("rokumar").withName("spring-boot-camel-1-hl6xf")
+            ExecWatch execWatch = client.pods().inNamespace("default").withName("spring-boot-camel-1-hl6xf")
                     .writingOutput(out).withTTY().usingListener(new ExecListener() {
                         @Override
                         public void onOpen(Response response) {

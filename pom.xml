@@ -14,7 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<version.fabric8.client>4.12.0</version.fabric8.client>
+		<version.fabric8.client>4.13.0</version.fabric8.client>
 		<commons-codec.version>1.15</commons-codec.version>
 		<commons-compress.version>1.20</commons-compress.version>
 	</properties>
