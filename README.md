@@ -1,5 +1,9 @@
 # Fabric8 Kubernetes Client Demo
+
+![Java CI with Maven](https://github.com/rohanKanojia/kubernetes-client-demo/workflows/Java%20CI%20with%20Maven/badge.svg)
 ![License](https://img.shields.io/github/license/rohanKanojia/kubernetes-client-demo)
+[![Twitter](https://img.shields.io/twitter/follow/fabric8io?style=social)](https://twitter.com/fabric8io)
+
 
 This project contains various samples for different usages of [Fabric8 Kubernetes Client](https://github.com/fabric8io/kubernetes-client). I generally use them in my blogs or for testing.
 
