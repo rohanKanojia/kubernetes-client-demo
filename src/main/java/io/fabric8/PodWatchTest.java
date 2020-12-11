@@ -3,9 +3,9 @@ package io.fabric8;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
+import io.fabric8.kubernetes.client.WatcherException;
 
 public class PodWatchTest {
     public static void main(String[] args) {
@@ -17,7 +17,10 @@ public class PodWatchTest {
                 }
 
                 @Override
-                public void onClose(KubernetesClientException e) { }
+                public void onClose() { }
+
+                @Override
+                public void onClose(WatcherException e) { }
             });
 
             // Watch till 10 seconds

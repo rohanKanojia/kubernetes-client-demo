@@ -1,5 +1,6 @@
 package io.fabric8;
 
+import io.fabric8.kubernetes.api.builder.TypedVisitor;
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapBuilder;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
@@ -33,8 +34,12 @@ public class ConfigMapDemo {
 			 * Let's edit a configMap
 			 */
 			client.configMaps().inNamespace(namespace).withName("configmap1")
-					.edit().addToData("three", "3").addToData("four", "4")
-					.done();
+					.edit(new TypedVisitor<ConfigMapBuilder>() {
+						@Override
+						public void visit(ConfigMapBuilder cb) {
+							cb.addToData("three", "3").addToData("four", "4");
+						}
+					});
 			
 			logger.log(Level.INFO, "Closing client");
 			client.close();

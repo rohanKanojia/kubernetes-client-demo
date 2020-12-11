@@ -3,7 +3,6 @@ package io.fabric8;
 import io.fabric8.crd.CronTab;
 import io.fabric8.crd.CronTabList;
 import io.fabric8.crd.CronTabStatus;
-import io.fabric8.crd.DoneableCronTab;
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinition;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -19,10 +18,10 @@ public class CustomResourceStatusTest {
 
     public static void main(String args[]) throws IOException {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
-            CustomResourceDefinition cronTabCrd = client.customResourceDefinitions().load(CustomResourceStatusTest.class.getResourceAsStream("/crontab-crd.yml")).get();
+            CustomResourceDefinition cronTabCrd = client.apiextensions().v1beta1().customResourceDefinitions().load(CustomResourceStatusTest.class.getResourceAsStream("/crontab-crd.yml")).get();
 
-            MixedOperation<CronTab, CronTabList, DoneableCronTab, Resource<CronTab, DoneableCronTab>> cronTabClient = client
-                    .customResources(cronTabCrd, CronTab.class, CronTabList.class, DoneableCronTab.class);
+            MixedOperation<CronTab, CronTabList, Resource<CronTab>> cronTabClient = client
+                    .customResources(cronTabCrd, CronTab.class, CronTabList.class);
 
             CronTab cronTab = cronTabClient.inNamespace("default").withName("my-new-cron-object").get();
 

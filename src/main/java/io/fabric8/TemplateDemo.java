@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
+import io.fabric8.kubernetes.client.WatcherException;
 import io.fabric8.kubernetes.client.internal.readiness.Readiness;
 import io.fabric8.openshift.api.model.Template;
 import io.fabric8.openshift.client.DefaultOpenShiftClient;
@@ -50,13 +51,19 @@ public class TemplateDemo {
 					}
 				}
 
-				public void onClose(KubernetesClientException arg0) {
+				@Override
+				public void onClose() {
+
+				}
+				@Override
+				public void onClose(WatcherException e) {
 					// TODO Auto-generated method stub
 				}
 			});
 			
 			latch.await(10, TimeUnit.MINUTES);
 			logger.log(Level.INFO, "Closing client now... ");
+			watch.close();
 			openshiftClient.close();
 		} catch (Exception exception) {
 			exception.printStackTrace();

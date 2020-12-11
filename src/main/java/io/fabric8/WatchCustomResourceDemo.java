@@ -2,8 +2,8 @@ package io.fabric8;
 
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.Watcher;
+import io.fabric8.kubernetes.client.WatcherException;
 import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,9 +15,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class WatchCustomResourceDemo {
-    private static Logger logger = LoggerFactory.getLogger(WatchCustomResourceDemo.class);
+    private static final Logger logger = LoggerFactory.getLogger(WatchCustomResourceDemo.class);
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             String namespace = "default";
             final CountDownLatch closeLatch = new CountDownLatch(1);
@@ -44,7 +44,10 @@ public class WatchCustomResourceDemo {
                 }
 
                 @Override
-                public void onClose(KubernetesClientException e) {
+                public void onClose() { }
+
+                @Override
+                public void onClose(WatcherException e) {
                     logger.info("Watcher onClose");
                     closeLatch.countDown();
                     if (e != null) {
