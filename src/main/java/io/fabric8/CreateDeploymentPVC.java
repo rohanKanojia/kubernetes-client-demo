@@ -16,7 +16,7 @@ public class CreateDeploymentPVC {
             PersistentVolumeClaim pvc = createNewPvc();
             Deployment deployment = createNewDeployment();
 
-            kubernetesClient.persistentVolumeClaims().inNamespace("default").createOrReplace(pvc);
+            //kubernetesClient.persistentVolumeClaims().inNamespace("default").createOrReplace(pvc);
             kubernetesClient.apps().deployments().inNamespace("default").createOrReplace(deployment);
         }
     }
