@@ -1,6 +1,5 @@
 package io.fabric8;
 
-import io.fabric8.crd.DoneableDummy;
 import io.fabric8.crd.Dummy;
 import io.fabric8.crd.DummyList;
 import io.fabric8.crd.DummySpec;
@@ -19,7 +18,7 @@ public class CustomResourceCreateDemo {
             Dummy dummy = getDummy();
 
             // Dummy Client
-            MixedOperation<Dummy, DummyList, DoneableDummy, Resource<Dummy, DoneableDummy>> dummyClient = null;
+            MixedOperation<Dummy, DummyList, Resource<Dummy>> dummyClient = null;
             CustomResourceDefinitionContext context = new CustomResourceDefinitionContext
                     .Builder()
                     .withGroup("demo.fabric8.io")
@@ -31,7 +30,7 @@ public class CustomResourceCreateDemo {
                     .build();
 
             // Initializing Dummy Client
-            dummyClient = client.customResources(context, Dummy.class, DummyList.class, DoneableDummy.class);
+            dummyClient = client.customResources(context, Dummy.class, DummyList.class);
             // Using Dummy Client to create Dummy resource
             dummyClient.inNamespace("default").createOrReplace(dummy);
         }

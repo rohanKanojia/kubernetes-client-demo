@@ -3,8 +3,8 @@ package io.fabric8;
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinition;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.Watcher;
+import io.fabric8.kubernetes.client.WatcherException;
 import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,10 +26,10 @@ public class RawCustomResourcesDemoBlog {
             String namespace = "default";
 
             // Load CRD as object from YAML
-            CustomResourceDefinition animalCrd = client.customResourceDefinitions()
+            CustomResourceDefinition animalCrd = client.apiextensions().v1beta1().customResourceDefinitions()
                     .load(RawCustomResourcesDemoBlog.class.getResourceAsStream("/animals-crd.yml")).get();
             // Apply CRD object onto your Kubernetes cluster
-            client.customResourceDefinitions().create(animalCrd);
+            client.apiextensions().v1beta1().customResourceDefinitions().create(animalCrd);
 
             CustomResourceDefinitionContext animalCrdContext = new CustomResourceDefinitionContext.Builder()
                     .withName("animals.jungle.example.com")
@@ -107,7 +107,10 @@ public class RawCustomResourcesDemoBlog {
                 }
 
                 @Override
-                public void onClose(KubernetesClientException e) {
+                public void onClose() { }
+
+                @Override
+                public void onClose(WatcherException e) {
                     log("Watcher onClose");
                     closeLatch.countDown();
                     if (e != null) {

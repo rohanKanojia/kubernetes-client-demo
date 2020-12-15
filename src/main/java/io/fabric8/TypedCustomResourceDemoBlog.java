@@ -2,23 +2,22 @@ package io.fabric8;
 
 import io.fabric8.crd.CronTab;
 import io.fabric8.crd.CronTabList;
-import io.fabric8.crd.DoneableCronTab;
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinition;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.Watcher;
+import io.fabric8.kubernetes.client.WatcherException;
 import io.fabric8.kubernetes.client.dsl.MixedOperation;
 import io.fabric8.kubernetes.client.dsl.Resource;
 import io.fabric8.kubernetes.internal.KubernetesDeserializer;
 
 public class TypedCustomResourceDemoBlog {
-    public static void main(String args[]) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
-            CustomResourceDefinition cronTabCrd = client.customResourceDefinitions().load(TypedCustomResourceDemoBlog.class.getResourceAsStream("/crontab-crd.yml")).get();
+            CustomResourceDefinition cronTabCrd = client.apiextensions().v1beta1().customResourceDefinitions().load(TypedCustomResourceDemoBlog.class.getResourceAsStream("/crontab-crd.yml")).get();
 
-            MixedOperation<CronTab, CronTabList, DoneableCronTab, Resource<CronTab, DoneableCronTab>> cronTabClient = client
-                    .customResources(cronTabCrd, CronTab.class, CronTabList.class, DoneableCronTab.class);
+            MixedOperation<CronTab, CronTabList, Resource<CronTab>> cronTabClient = client
+                    .customResources(cronTabCrd, CronTab.class, CronTabList.class);
 
             // Load CronTab CustomResource from file
             CronTab cronTab1 = cronTabClient.load(TypedCustomResourceDemoBlog.class.getResourceAsStream("/crontab.yml")).get();
@@ -54,9 +53,13 @@ public class TypedCustomResourceDemoBlog {
                 }
 
                 @Override
-                public void onClose(KubernetesClientException e) {
+                public void onClose() { }
+
+                @Override
+                public void onClose(WatcherException e) {
                     log("watch closed...");
                 }
+
             });
 
             log("Watch open for 60 seconds...");
