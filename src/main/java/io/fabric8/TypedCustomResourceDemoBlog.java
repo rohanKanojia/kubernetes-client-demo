@@ -45,7 +45,6 @@ public class TypedCustomResourceDemoBlog {
             cronTabClient.inNamespace("default").withName("my-second-cron-object").delete();
             log("CronTabs successfully deleted");
 
-            KubernetesDeserializer.registerCustomKind("stable.example.com" + "/v1", "CronTab", CronTab.class);
             cronTabClient.inNamespace("default").watch(new Watcher<CronTab>() {
                 @Override
                 public void eventReceived(Action action, CronTab cronTab) {
