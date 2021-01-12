@@ -10,14 +10,14 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CustomResourceSchemaValidation {
     private static final Logger logger = Logger.getLogger(CustomResourceSchemaValidation.class.getName());
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         final URL resource = CustomResourceSchemaValidation.class.getResource("/test.json");
 
@@ -32,7 +32,7 @@ public class CustomResourceSchemaValidation {
                 .withNewNames()
                 .withKind("Example")
                 .withPlural("somethings")
-                .withShortNames(Arrays.asList("ex")).endNames()
+                .withShortNames(Collections.singletonList("ex")).endNames()
                 .withGroup("example.com")
                 .withVersion("v1")
                 .withScope("Namespaced");
@@ -43,25 +43,22 @@ public class CustomResourceSchemaValidation {
                 .endSpec()
                 .build();
 
-        KubernetesClient client = new DefaultKubernetesClient();
+        try (KubernetesClient client = new DefaultKubernetesClient()) {
+            client.apiextensions().v1beta1().customResourceDefinitions().createOrReplace(customResourceDefinition);
+            logger.log(Level.INFO, "CRD created once");
+            // This will always fail
+            client.apiextensions().v1beta1().customResourceDefinitions().createOrReplace(customResourceDefinition);
+            logger.log(Level.INFO, "CRD created twice");
+        }
 //        // To make this test idempotent
-//        client.customResourceDefinitions().delete(customResourceDefinition);
+//        client.apiextensions().v1beta1().customResourceDefinitions().delete(customResourceDefinition);
 //        do {
 //            System.out.println("Waiting until CRD is gone from K8s");
 //            Thread.sleep(500);
-//        } while (client.customResourceDefinitions().list()
+//        } while (client.apiextensions().v1beta1().customResourceDefinitions().list()
 //                .getItems()
 //                .stream()
 //                .anyMatch(io.fabric8.crd -> io.fabric8.crd.getMetadata().getName().contains("somethings")));
 
-        client.customResourceDefinitions().createOrReplace(customResourceDefinition);
-        logger.log(Level.INFO, "CRD created once");
-        // This will always fail
-        client.customResourceDefinitions().createOrReplace(customResourceDefinition);
-        logger.log(Level.INFO, "CRD created twice");
-    }
-
-    private static void log(String action) {
-        logger.info(action);
     }
 }

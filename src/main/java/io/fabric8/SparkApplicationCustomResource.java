@@ -15,13 +15,13 @@ import java.util.logging.Logger;
 public class SparkApplicationCustomResource {
     private static final Logger logger = Logger.getLogger(SparkApplicationCustomResource.class.getName());
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String[] args) throws IOException {
 
         try (final KubernetesClient client = new DefaultKubernetesClient()) {
-            CustomResourceDefinition sparkCrd = client.customResourceDefinitions()
+            CustomResourceDefinition sparkCrd = client.apiextensions().v1beta1().customResourceDefinitions()
                     .load(SparkApplicationCustomResource.class.getResourceAsStream("/sparkapplication-crd.yml"))
                     .get();
-            client.customResourceDefinitions().create(sparkCrd);
+            client.apiextensions().v1beta1().customResourceDefinitions().create(sparkCrd);
             log("Custom Resource Definition " + sparkCrd.getMetadata().getName() + " created.");
 
             CustomResourceDefinitionContext customResourceDefinitionContext = new CustomResourceDefinitionContext.Builder()
@@ -45,7 +45,7 @@ public class SparkApplicationCustomResource {
             configMapVolume.put("name", "app-config");
             configMapVolume.put("configMap", Collections.singletonMap("name", "app-conf"));
             Map<String, Object> sparkCustomResourceSpec = (Map<String, Object>)sparkCustomResource.get("spec");
-            sparkCustomResourceSpec.put("volumes", Arrays.asList(configMapVolume));
+            sparkCustomResourceSpec.put("volumes", Collections.singletonList(configMapVolume));
 
             sparkCustomResource.put("spec", sparkCustomResourceSpec);
 
