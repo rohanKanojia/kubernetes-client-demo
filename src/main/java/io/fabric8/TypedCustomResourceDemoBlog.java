@@ -9,7 +9,6 @@ import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
 import io.fabric8.kubernetes.client.dsl.MixedOperation;
 import io.fabric8.kubernetes.client.dsl.Resource;
-import io.fabric8.kubernetes.internal.KubernetesDeserializer;
 
 public class TypedCustomResourceDemoBlog {
     public static void main(String[] args) throws InterruptedException {
@@ -44,6 +43,7 @@ public class TypedCustomResourceDemoBlog {
             cronTabClient.inNamespace("default").delete(cronTab1);
             cronTabClient.inNamespace("default").withName("my-second-cron-object").delete();
             log("CronTabs successfully deleted");
+
 
             cronTabClient.inNamespace("default").watch(new Watcher<CronTab>() {
                 @Override
