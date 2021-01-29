@@ -1,0 +1,8 @@
+apiVersion: testing.fabric8.io/v1alpha1
+kind: Book
+metadata:
+  name: effective-java
+spec:
+  title: "Effective Java"
+  author: "Joshua Bloch"
+  isbn: "0134685997"
