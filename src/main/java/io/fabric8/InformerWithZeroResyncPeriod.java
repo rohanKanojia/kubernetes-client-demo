@@ -1,7 +1,6 @@
 package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
@@ -16,7 +15,7 @@ public class InformerWithZeroResyncPeriod {
     public static void main(String[] args) throws InterruptedException {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             SharedInformerFactory sharedInformerFactory = client.informers();
-            SharedIndexInformer<Pod> podInformer = sharedInformerFactory.sharedIndexInformerFor(Pod.class, PodList.class, 0);
+            SharedIndexInformer<Pod> podInformer = sharedInformerFactory.sharedIndexInformerFor(Pod.class, 0);
             logger.info("Informer factory initialized.");
 
             podInformer.addEventHandler(

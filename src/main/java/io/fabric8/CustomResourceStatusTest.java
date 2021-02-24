@@ -16,12 +16,10 @@ import java.util.logging.Logger;
 public class CustomResourceStatusTest {
     private static final Logger logger = Logger.getLogger(CustomResourceStatusTest.class.getName());
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String[] args) throws IOException {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
-            CustomResourceDefinition cronTabCrd = client.apiextensions().v1beta1().customResourceDefinitions().load(CustomResourceStatusTest.class.getResourceAsStream("/crontab-crd.yml")).get();
-
             MixedOperation<CronTab, CronTabList, Resource<CronTab>> cronTabClient = client
-                    .customResources(cronTabCrd, CronTab.class, CronTabList.class);
+                    .customResources(CronTab.class, CronTabList.class);
 
             CronTab cronTab = cronTabClient.inNamespace("default").withName("my-new-cron-object").get();
 

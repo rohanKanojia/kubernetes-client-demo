@@ -1,10 +1,8 @@
 package io.fabric8;
 
 import io.fabric8.crd.CronTab;
-import io.fabric8.crd.CronTabList;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer;
 import io.fabric8.kubernetes.client.informers.SharedInformerFactory;
@@ -16,18 +14,9 @@ public class CustomResourceInformerDemo {
 
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
-            CustomResourceDefinitionContext crdContext = new CustomResourceDefinitionContext.Builder()
-                    .withVersion("v1")
-                    .withScope("Namespaced")
-                    .withGroup("stable.example.com")
-                    .withPlural("crontabs")
-                    .build();
-
             SharedInformerFactory sharedInformerFactory = client.informers();
             SharedIndexInformer<CronTab> podInformer = sharedInformerFactory.sharedIndexInformerForCustomResource(
-                    crdContext,
                     CronTab.class,
-                    CronTabList.class,
                     60 * 1000L);
             logger.info("Informer factory initialized.");
 

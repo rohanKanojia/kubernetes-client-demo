@@ -1,9 +1,7 @@
 package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
-import io.fabric8.kubernetes.api.model.ConfigMapList;
 import io.fabric8.kubernetes.api.model.Secret;
-import io.fabric8.kubernetes.api.model.SecretList;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
@@ -18,8 +16,8 @@ public class ConfigMapAndSecretInformers {
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             SharedInformerFactory informerFactory = client.informers();
-            SharedIndexInformer<ConfigMap> configMapInformer = informerFactory.sharedIndexInformerFor(ConfigMap.class, ConfigMapList.class, 1 * 60 * 1000);
-            SharedIndexInformer<Secret> secretInformer = informerFactory.sharedIndexInformerFor(Secret.class, SecretList.class, 1 * 60 * 1000);
+            SharedIndexInformer<ConfigMap> configMapInformer = informerFactory.sharedIndexInformerFor(ConfigMap.class, 1 * 60 * 1000);
+            SharedIndexInformer<Secret> secretInformer = informerFactory.sharedIndexInformerFor(Secret.class, 1 * 60 * 1000);
             configMapInformer.addEventHandler(new ResourceEventHandler<ConfigMap>() {
                 @Override
                 public void onAdd(ConfigMap configMap) {

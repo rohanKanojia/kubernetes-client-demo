@@ -1,11 +1,8 @@
 package io.fabric8;
 
 import io.fabric8.crd.CronTab;
-import io.fabric8.crd.CronTabList;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
-import io.fabric8.kubernetes.client.dsl.base.OperationContext;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer;
 import io.fabric8.kubernetes.client.informers.SharedInformerFactory;
@@ -13,23 +10,14 @@ import io.fabric8.kubernetes.client.informers.SharedInformerFactory;
 import java.util.logging.Logger;
 
 public class NamespacedInformerForCustomResource {
-    private static Logger logger = Logger.getLogger(NamespacedInformerDemo.class.getSimpleName());
+    private static final Logger logger = Logger.getLogger(NamespacedInformerDemo.class.getSimpleName());
 
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             SharedInformerFactory sharedInformerFactory = client.informers();
-            CustomResourceDefinitionContext crdContext = new CustomResourceDefinitionContext.Builder()
-                    .withVersion("v1")
-                    .withScope("Namespaced")
-                    .withGroup("stable.example.com")
-                    .withPlural("crontabs")
-                    .build();
 
-            SharedIndexInformer<CronTab> informer = sharedInformerFactory.sharedIndexInformerForCustomResource(
-                    crdContext,
+            SharedIndexInformer<CronTab> informer = sharedInformerFactory.inNamespace("default").sharedIndexInformerForCustomResource(
                     CronTab.class,
-                    CronTabList.class,
-                    new OperationContext().withNamespace("default"),
                     30 * 1000L);
             logger.info("Informer factory initialized.");
 

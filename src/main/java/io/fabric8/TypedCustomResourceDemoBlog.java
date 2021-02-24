@@ -13,10 +13,7 @@ import io.fabric8.kubernetes.client.dsl.Resource;
 public class TypedCustomResourceDemoBlog {
     public static void main(String[] args) throws InterruptedException {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
-            CustomResourceDefinition cronTabCrd = client.apiextensions().v1beta1().customResourceDefinitions().load(TypedCustomResourceDemoBlog.class.getResourceAsStream("/crontab-crd.yml")).get();
-
-            MixedOperation<CronTab, CronTabList, Resource<CronTab>> cronTabClient = client
-                    .customResources(cronTabCrd, CronTab.class, CronTabList.class);
+            MixedOperation<CronTab, CronTabList, Resource<CronTab>> cronTabClient = client.customResources(CronTab.class, CronTabList.class);
 
             // Load CronTab CustomResource from file
             CronTab cronTab1 = cronTabClient.load(TypedCustomResourceDemoBlog.class.getResourceAsStream("/crontab.yml")).get();
