@@ -13,13 +13,13 @@ public class PortForwardDemo {
 
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
-            String podName = "spring-boot-76dcfb669c-h4kxp";
+            String podName = "getting-started-7bc7b9d47b-jndfs";
 
             logger.info("Starting Port Forward for pod: {} {} -> {}", podName, 80, 8080);
             LocalPortForward portForward = client.pods()
                     .inNamespace("default")
                     .withName(podName)
-                    .portForward(8080, 8080);
+                    .portForward(8080, 8089);
 
             Thread.sleep(60 * 1000);
             logger.info("Closing...");

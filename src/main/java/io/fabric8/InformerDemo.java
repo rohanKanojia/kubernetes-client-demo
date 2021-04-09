@@ -22,12 +22,12 @@ public class InformerDemo {
                     new ResourceEventHandler<Pod>() {
                         @Override
                         public void onAdd(Pod pod) {
-                            logger.info("Pod " + pod.getMetadata().getName() + " got added");
+                            System.out.println("Pod " + pod.getMetadata().getNamespace() + "/" + pod.getMetadata().getName() + " got added");
                         }
 
                         @Override
                         public void onUpdate(Pod oldPod, Pod newPod) {
-                            logger.info("Pod " + oldPod.getMetadata().getName() + " got updated");
+                            System.out.println("Pod " + oldPod.getMetadata().getNamespace() + "/" + oldPod.getMetadata().getName() + " got updated");
                         }
 
                         @Override
