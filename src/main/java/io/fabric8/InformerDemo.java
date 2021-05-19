@@ -10,7 +10,7 @@ import io.fabric8.kubernetes.client.informers.SharedInformerFactory;
 import java.util.logging.Logger;
 
 public class InformerDemo {
-    private static final Logger logger = Logger.getLogger(InformerDemo.class.getSimpleName());
+    private static final Logger logger = Logger.getLogger("::");
 
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
@@ -41,7 +41,7 @@ public class InformerDemo {
             sharedInformerFactory.startAllRegisteredInformers();
 
             // Wait for 1 minute
-            Thread.sleep(60 * 1000L);
+            Thread.sleep(60 * 60 * 1000L);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             e.printStackTrace();
