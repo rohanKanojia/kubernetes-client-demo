@@ -43,3 +43,4 @@ mvn exec:java -Dexec.mainClass="io.fabric8.DeploymentDemo"
 | `kubectl cp <pod>:/tmp/foo /tmp/bar`           | [DownloadFileFromPod.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/DownloadFileFromPod.java) | 
 | `kubectl cp <pod>:/tmp/foo -c c1 /tmp/bar`     | [DownloadFileFromMultiContainerPod.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/DownloadFileFromMultiContainerPod.java) | 
 | `kubectl cp /foo_dir <pod>:/tmp/bar_dir`       | [UploadFileToPod.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/UploadFileToPod.java) | 
+| `kubectl patch deployment patch-demo --patch '{"spec": {"template": {"spec": {"containers": [{"name": "patch-demo-ctr-2","image": "redis"}]}}}}'`       | [PatchExamples.java](https://github.com/rohanKanojia/kubernetes-client-demo/blob/master/src/main/java/io/fabric8/PatchExamples.java) | 
