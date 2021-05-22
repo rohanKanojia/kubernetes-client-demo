@@ -30,6 +30,6 @@ public class ManualCronJobTrigger {
                 .withSpec(cronJob.getSpec().getJobTemplate().getSpec())
                 .build();
 
-        return kubernetesClient.batch().jobs().inNamespace(namespace).create(newJobToCreate);
+        return kubernetesClient.batch().v1().jobs().inNamespace(namespace).create(newJobToCreate);
     }
 }
