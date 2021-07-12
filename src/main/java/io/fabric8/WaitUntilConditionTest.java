@@ -14,8 +14,6 @@ public class WaitUntilConditionTest {
 
             client.apps().deployments().inNamespace("default").withName("nginx-deployment")
                     .waitUntilCondition(d -> d.getStatus().getReadyReplicas() != null && d.getStatus().getReadyReplicas() == 2, 10, TimeUnit.SECONDS);
-        } catch (InterruptedException interruptedException) {
-            interruptedException.printStackTrace();
         }
     }
 }

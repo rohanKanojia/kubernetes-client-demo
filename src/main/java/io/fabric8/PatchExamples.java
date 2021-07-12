@@ -74,7 +74,7 @@ public class PatchExamples {
         kubernetesClient.apps().deployments()
                 .inNamespace(deployment.getMetadata().getNamespace())
                 .withName(deployment.getMetadata().getName())
-                .patch(patchContext, "[{\"op\": \"replace\", \"path\":\"/spec/template/spec/containers/0/image\", \"value\":\"nginx:mainline\"}]");
+                .patch(patchContext, "[{\"op\": \"test\", \"path\":\"/metadata/labels\", \"value\":null}]");
     }
 
     private static void patchStrategicMerge(KubernetesClient kubernetesClient, Deployment deployment) {

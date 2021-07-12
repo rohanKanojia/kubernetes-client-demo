@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/path: /metrics
+    jkube.io/git-branch: master
+    prometheus.io/port: "9779"
+    jkube.io/scm-url: https://github.com/spring-projects/spring-boot/random-generator
+    prometheus.io/scrape: "true"
+    jkube.io/git-url: git@github.com:rohanKanojia/eclipse-jkube-demo-project.git
+    jkube.io/scm-tag: HEAD
+    jkube.io/git-commit: 7be4f613695f489ff088bf49a943032e6fe7a79e
+  labels:
+    expose: "true"
+    app: random-generator
+    provider: jkube
+    version: 0.0.1
+    group: meetup
+  name: random-generator
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: random-generator
+    provider: jkube
+    group: meetup
+  type: NodePort
