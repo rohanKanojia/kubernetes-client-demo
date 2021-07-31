@@ -6,8 +6,11 @@ import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentBuilder;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.dsl.base.PatchContext;
 import io.fabric8.kubernetes.client.dsl.base.PatchType;
+
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +28,8 @@ public class PatchExamples {
             patchStrategicMergeExplicit(kubernetesClient, deployment);
             patchJson(kubernetesClient, deployment);
             patchJsonMerge(kubernetesClient, deployment);
+        } catch (KubernetesClientException e) {
+            System.out.println("Exception received: " + e.getMessage());
         }
     }
 
