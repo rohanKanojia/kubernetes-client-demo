@@ -16,7 +16,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<version.fabric8.client>5.6.0</version.fabric8.client>
 		<commons-codec.version>1.15</commons-codec.version>
-		<commons-compress.version>1.20</commons-compress.version>
+		<commons-compress.version>1.21</commons-compress.version>
 	</properties>
 
 	<dependencyManagement>
