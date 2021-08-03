@@ -10,6 +10,9 @@ import io.fabric8.kubernetes.client.informers.SharedInformerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 public class ConfigMapAndSecretInformers {
     private static final Logger logger = LoggerFactory.getLogger(ConfigMapAndSecretInformers.class.getName());
 
@@ -51,13 +54,15 @@ public class ConfigMapAndSecretInformers {
                 }
             });
 
-            informerFactory.startAllRegisteredInformers();
+            Future<Void> startAllInformersFuture = informerFactory.startAllRegisteredInformers();
+            startAllInformersFuture.get();
 
             Thread.sleep(30 * 60 * 1000);
         } catch (InterruptedException interruptedException) {
             logger.error("Interrupted", interruptedException);
             Thread.currentThread().interrupt();
+        } catch (ExecutionException executionException) {
+            logger.error("Error in starting informers", executionException);
         }
     }
-
 }

@@ -40,6 +40,7 @@ public class JobInformer {
 
             // Wait for 1 minute
             Thread.sleep(60 * 1000L);
+            jobSharedIndexInformer.stop();
         }
     }
 }

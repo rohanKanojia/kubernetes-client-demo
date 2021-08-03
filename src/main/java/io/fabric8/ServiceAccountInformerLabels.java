@@ -3,23 +3,15 @@ package io.fabric8;
 import io.fabric8.kubernetes.api.model.ServiceAccount;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.dsl.base.OperationContext;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer;
-import io.fabric8.kubernetes.client.informers.SharedInformerFactory;
 
 import java.util.Collections;
 
 public class ServiceAccountInformerLabels {
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
-            SharedInformerFactory factory = client.informers();
-
-            SharedIndexInformer<ServiceAccount> saInformer = factory.sharedIndexInformerFor(ServiceAccount.class,
-                    new OperationContext().withLabels(Collections.singletonMap("foo", "bar")),
-                    10 * 60 * 1000);
-
-            saInformer.addEventHandler(new ResourceEventHandler<ServiceAccount>() {
+            SharedIndexInformer<ServiceAccount> serviceAccountSharedIndexInformer = client.serviceAccounts().withLabels(Collections.singletonMap("foo", "bar")).inform(new ResourceEventHandler<ServiceAccount>() {
                 @Override
                 public void onAdd(ServiceAccount serviceAccount) {
                     System.out.printf("ADDED %s/%s\n", serviceAccount.getMetadata().getNamespace(), serviceAccount.getMetadata().getName());
@@ -37,10 +29,10 @@ public class ServiceAccountInformerLabels {
                 }
             });
 
-            factory.startAllRegisteredInformers();
-
             Thread.sleep(30 * 160 * 1000L);
+            serviceAccountSharedIndexInformer.stop();
         } catch (InterruptedException interruptedException) {
+            Thread.currentThread().interrupt();
             interruptedException.printStackTrace();
         }
     }

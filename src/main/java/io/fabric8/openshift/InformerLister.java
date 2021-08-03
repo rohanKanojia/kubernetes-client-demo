@@ -4,7 +4,6 @@ import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer;
-import io.fabric8.kubernetes.client.informers.SharedInformerFactory;
 import io.fabric8.kubernetes.client.informers.cache.Lister;
 import io.fabric8.openshift.client.DefaultOpenShiftClient;
 import io.fabric8.openshift.client.OpenShiftClient;
@@ -16,11 +15,9 @@ import java.util.concurrent.TimeUnit;
 public class InformerLister {
     public static void main(String[] args) {
         try (OpenShiftClient client = new DefaultOpenShiftClient()) {
-            String namespace = "rokumar-code";
-            SharedInformerFactory informerFactory = client.informers();
-            SharedIndexInformer<ConfigMap> informer = informerFactory.inNamespace(namespace)
-                    .sharedIndexInformerFor(ConfigMap.class, 30 * 1000L);
-            informer.addEventHandler(new ResourceEventHandler<ConfigMap>() {
+            String namespace = "default";
+            System.out.println(new Timestamp(System.currentTimeMillis()) + "ConfigMap informer started for namespace: " + namespace);
+            SharedIndexInformer<ConfigMap> informer =client.configMaps().inNamespace(namespace).inform(new ResourceEventHandler<ConfigMap>() {
                 @Override
                 public void onAdd(ConfigMap configMap) {
                     System.out.println(new Timestamp(System.currentTimeMillis()) + " ADD " + configMap.getMetadata().getName());
@@ -36,11 +33,9 @@ public class InformerLister {
                     System.out.println(new Timestamp(System.currentTimeMillis()) + "DELETE " + configMap.getMetadata().getName());
                 }
             });
-            System.out.println(new Timestamp(System.currentTimeMillis()) + "ConfigMap informer started for namespace: " + namespace);
-            informerFactory.startAllRegisteredInformers();
             while(!informer.hasSynced()) {
                 Thread.sleep(500L);
-                System.out.println(new Timestamp(System.currentTimeMillis()) + "Not Synced");
+                System.out.println(new Timestamp(System.currentTimeMillis()) + " Not Synced");
             }
             Lister<ConfigMap> list = new Lister<>(informer.getIndexer(), namespace);
             List<ConfigMap> configMapList = list.list();
@@ -48,7 +43,9 @@ public class InformerLister {
             configMapList.stream().map(ConfigMap::getMetadata).map(ObjectMeta::getName).forEach(System.out::println);
 
             TimeUnit.MINUTES.sleep(40);
+            informer.stop();
         } catch (InterruptedException interruptedException) {
+            Thread.currentThread().interrupt();
             interruptedException.printStackTrace();
         }
     }

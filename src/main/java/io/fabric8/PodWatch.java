@@ -3,7 +3,6 @@ package io.fabric8;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
 import org.slf4j.Logger;
@@ -23,28 +22,31 @@ public class PodWatch {
             client.pods().inNamespace(namespace).watch(new Watcher<Pod>() {
                 @Override
                 public void eventReceived(Action action, Pod pod) {
-                    logger.info( action.name() + " " + pod.getMetadata().getName());
+                    logger.info("{} {}", action.name(), pod.getMetadata().getName());
                     switch (action.name()) {
                         case "ADDED":
-                            logger.info( pod.getMetadata().getName() + "got added");
+                            logger.info("{}/{} got added", pod.getMetadata().getNamespace(), pod.getMetadata().getName());
                             break;
                         case "DELETED":
-                            logger.info( pod.getMetadata().getName() + "got deleted");
+                            logger.info("{}/{} got deleted", pod.getMetadata().getNamespace(), pod.getMetadata().getName());
                             break;
                         case "MODIFIED":
-                            logger.info( pod.getMetadata().getName() + "got modified");
+                            logger.info("{}/{} got modified", pod.getMetadata().getNamespace(), pod.getMetadata().getName());
                             break;
                         default:
-                            logger.error("Unrecognized event: " + action.name());
+                            logger.error("Unrecognized event: {}", action.name());
                     }
                 }
 
                 @Override
-                public void onClose() { }
+                public void onClose() {
+                    logger.info("Watch closed");
+                    isWatchClosed.countDown();
+                }
 
                 @Override
                 public void onClose(WatcherException e) {
-                    logger.info( "Closed");
+                    logger.info("Watched closed due to exception ", e);
                     isWatchClosed.countDown();
                 }
             });

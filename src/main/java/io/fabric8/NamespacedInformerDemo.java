@@ -5,48 +5,40 @@ import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer;
-import io.fabric8.kubernetes.client.informers.SharedInformerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.logging.Logger;
 
 public class NamespacedInformerDemo {
-    private static final Logger logger = Logger.getLogger(NamespacedInformerDemo.class.getSimpleName());
+    private static final Logger logger = LoggerFactory.getLogger(NamespacedInformerDemo.class.getSimpleName());
 
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
-            SharedInformerFactory sharedInformerFactory = client.informers();
-            SharedIndexInformer<Pod> podInformer = sharedInformerFactory.inNamespace("default").sharedIndexInformerFor(
-                    Pod.class,
-                    30 * 1000L);
-            logger.info("Informer factory initialized.");
+            logger.info("Creating SharedIndexInformer for default namespace");
+            SharedIndexInformer<Pod> podInformer = client.pods().inNamespace("default").inform(new ResourceEventHandler<Pod>() {
+                @Override
+                public void onAdd(Pod pod) {
+                    logger.info("Pod {} got added", pod.getMetadata().getName());
+                }
 
-            podInformer.addEventHandler(
-                    new ResourceEventHandler<Pod>() {
-                        @Override
-                        public void onAdd(Pod pod) {
-                            logger.info("Pod " + pod.getMetadata().getName() + " got added");
-                        }
+                @Override
+                public void onUpdate(Pod oldPod, Pod newPod) {
+                    logger.info("Pod {} got updated", oldPod.getMetadata().getName());
+                }
 
-                        @Override
-                        public void onUpdate(Pod oldPod, Pod newPod) {
-                            logger.info("Pod " + oldPod.getMetadata().getName() + " got updated");
-                        }
-
-                        @Override
-                        public void onDelete(Pod pod, boolean deletedFinalStateUnknown) {
-                            logger.info("Pod " + pod.getMetadata().getName() + " got deleted");
-                        }
-                    });
-
-            logger.info("Starting all registered informers");
-            sharedInformerFactory.startAllRegisteredInformers();
+                @Override
+                public void onDelete(Pod pod, boolean deletedFinalStateUnknown) {
+                    logger.info("Pod {} got deleted", pod.getMetadata().getName());
+                }
+            });
 
             // Wait for 1 minute
-            Thread.sleep(15 * 60 * 1000L);
-            sharedInformerFactory.stopAllRegisteredInformers();
+            Thread.sleep(60 * 1000L);
+            logger.info("Stopping Pod SharedIndexInformer");
+            podInformer.stop();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            e.printStackTrace();
+            logger.info("Interrupted ", e);
         }
     }
 }
