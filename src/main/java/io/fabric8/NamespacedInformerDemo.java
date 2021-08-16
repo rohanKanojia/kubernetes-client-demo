@@ -14,6 +14,7 @@ public class NamespacedInformerDemo {
 
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
+
             logger.info("Creating SharedIndexInformer for default namespace");
             SharedIndexInformer<Pod> podInformer = client.pods().inNamespace("default").inform(new ResourceEventHandler<Pod>() {
                 @Override

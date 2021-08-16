@@ -31,7 +31,7 @@ public class ValidatingWebhookConfigurationTest {
                     .endWebhook()
                     .build();
 
-            client.admissionRegistration().v1().validatingWebhookConfigurations().inNamespace("default").create(vwc);
+            client.admissionRegistration().v1().validatingWebhookConfigurations().create(vwc);
         }
     }
 }
