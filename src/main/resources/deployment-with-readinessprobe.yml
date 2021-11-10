@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-readinessprobe
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: k8x.gcr.io/nginx-slim:0.8
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          initialDelaySeconds: 1
+          periodSeconds: 2
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 1
+          httpGet:
+            scheme: HTTP
+            path: /
+            httpHeaders:
+            - name: Host
+              value: nginxapp.com
+            port: 8080

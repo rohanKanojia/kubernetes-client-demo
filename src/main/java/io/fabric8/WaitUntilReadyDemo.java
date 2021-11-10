@@ -41,6 +41,7 @@ public class WaitUntilReadyDemo {
 
             LogWatch watch = client.pods().inNamespace(namespace).withName(pod.getMetadata().getName()).watchLog(System.out);
 
+
             // Wait for 10 seconds
             Thread.sleep(10000);
 
