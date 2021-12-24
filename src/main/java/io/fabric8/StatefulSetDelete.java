@@ -14,31 +14,21 @@ import io.fabric8.kubernetes.api.model.apps.StatefulSetSpecBuilder;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.ConfigBuilder;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
-import io.fabric8.kubernetes.client.utils.HttpClientUtils;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import org.slf4j.LoggerFactory;
-
+import io.fabric8.kubernetes.client.okhttp.OkHttpClientFactory;
+import io.fabric8.kubernetes.client.okhttp.OkHttpClientImpl;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 public class StatefulSetDelete {
 
     public static void main(String[] argv) throws Exception {
 
-        final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
         final Config config = new ConfigBuilder().build();
-        OkHttpClient httpClient = HttpClientUtils.createHttpClient(config);
-        httpClient = httpClient.newBuilder()
-                .addInterceptor(interceptor)
-                .build();
+        OkHttpClientImpl httpClientImpl = new OkHttpClientFactory().createHttpClient(config);
 
         final String statefulSetName = "test" + System.currentTimeMillis();
 
-        final DefaultKubernetesClient client = new DefaultKubernetesClient(httpClient, config);
+        final DefaultKubernetesClient client = new DefaultKubernetesClient(httpClientImpl, config);
         client.apps().statefulSets().create(createStatefulSet(statefulSetName));
 
         StatefulSet statefulSet = client.apps().statefulSets().withName(statefulSetName).waitUntilReady(5, TimeUnit.MINUTES);

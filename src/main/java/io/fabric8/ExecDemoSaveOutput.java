@@ -19,7 +19,7 @@ public class ExecDemoSaveOutput {
             ExecWatch execWatch = client.pods().inNamespace("default").withName("spring-boot-camel-1-hl6xf")
                     .writingOutput(out).withTTY().usingListener(new ExecListener() {
                         @Override
-                        public void onOpen(Response response) {
+                        public void onOpen() {
                             System.out.println("Shell was opened");
                         }
 
