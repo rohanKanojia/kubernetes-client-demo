@@ -1,8 +1,8 @@
 package io.fabric8;
 
-import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobBuilder;
+import io.fabric8.kubernetes.api.model.batch.v1beta1.CronJob;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
@@ -14,7 +14,7 @@ public class ManualCronJobTrigger {
     }
 
     private static Job createManualJob(KubernetesClient kubernetesClient, String namespace, String cronJobName, String jobName) {
-        CronJob cronJob = kubernetesClient.batch().v1().cronjobs().inNamespace(namespace).withName(cronJobName).get();
+        CronJob cronJob = kubernetesClient.batch().v1beta1().cronjobs().inNamespace(namespace).withName(cronJobName).get();
 
         Job newJobToCreate = new JobBuilder()
                 .withNewMetadata()
