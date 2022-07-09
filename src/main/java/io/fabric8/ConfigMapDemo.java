@@ -3,7 +3,7 @@ package io.fabric8;
 import io.fabric8.kubernetes.api.builder.TypedVisitor;
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 
@@ -17,9 +17,9 @@ public class ConfigMapDemo {
 	private static final Logger logger = Logger.getLogger(ConfigMapDemo.class
 			.getName());
 
-	public static void main(String args[]) throws InterruptedException {
+  public static void main(String[] args) {
 		String namespace = "default";
-		try (final KubernetesClient client = new DefaultKubernetesClient()) {
+		try (final KubernetesClient client = new KubernetesClientBuilder().build()) {
 			ConfigMap configMap1 = new ConfigMapBuilder()
 					.withNewMetadata()
 					  .withName("configmap1")
@@ -30,7 +30,7 @@ public class ConfigMapDemo {
 					.build();
 
 			logger.log(Level.INFO, "Creating config map");
-			client.configMaps().inNamespace(namespace).createOrReplace(configMap1);
+			client.configMaps().inNamespace(namespace).resource(configMap1).createOrReplace();
 			logger.log(Level.INFO, "OK .. ConfigMap successfully created");
 
 			/*

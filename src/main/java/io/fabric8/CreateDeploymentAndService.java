@@ -5,14 +5,14 @@ import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceBuilder;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
 import java.util.Collections;
 
 public class CreateDeploymentAndService {
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             Deployment deployment = new DeploymentBuilder()
                     .withNewMetadata().withName("nginx-deployment").addToLabels("app", "nginx").endMetadata()
                     .withNewSpec()
@@ -32,7 +32,7 @@ public class CreateDeploymentAndService {
                     .endTemplate()
                     .endSpec()
                     .build();
-            client.apps().deployments().inNamespace("default").create(deployment);
+            client.apps().deployments().inNamespace("default").resource(deployment).create();
 
             Service service = new ServiceBuilder()
                     .withNewMetadata().withName("nginx-svc").addToLabels("app", "nginx").endMetadata()
@@ -46,7 +46,7 @@ public class CreateDeploymentAndService {
                     .withType("NodePort")
                     .endSpec()
                     .build();
-            client.services().inNamespace("default").create(service);
+            client.services().inNamespace("default").resource(service).create();
         }
     }
 }

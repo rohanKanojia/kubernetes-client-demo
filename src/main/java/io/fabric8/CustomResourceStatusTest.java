@@ -3,7 +3,7 @@ package io.fabric8;
 import io.fabric8.crd.CronTab;
 import io.fabric8.crd.CronTabList;
 import io.fabric8.crd.CronTabStatus;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.MixedOperation;
 import io.fabric8.kubernetes.client.dsl.Resource;
@@ -14,7 +14,7 @@ public class CustomResourceStatusTest {
     private static final Logger logger = Logger.getLogger(CustomResourceStatusTest.class.getName());
 
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             MixedOperation<CronTab, CronTabList, Resource<CronTab>> cronTabClient = client
                     .resources(CronTab.class, CronTabList.class);
 
@@ -26,7 +26,7 @@ public class CustomResourceStatusTest {
             newStatus.setLabelSelector("foobar");
             cronTab.setStatus(newStatus);
 
-            CronTab updatedCronTab = cronTabClient.inNamespace("default").replaceStatus(cronTab);
+            CronTab updatedCronTab = cronTabClient.inNamespace("default").resource(cronTab).replaceStatus();
             log(updatedCronTab.getStatus().getLabelSelector());
         }
     }

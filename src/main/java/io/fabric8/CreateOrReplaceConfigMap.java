@@ -2,7 +2,7 @@ package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
 import static java.util.Collections.singletonMap;
@@ -21,10 +21,10 @@ public class CreateOrReplaceConfigMap {
     }
 
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             ConfigMap newResource = getOriginalCM();
-            client.configMaps().inNamespace(NAMESPACE).withName(RESOURCE_NAME).create(newResource);
-            client.configMaps().inNamespace(NAMESPACE).createOrReplace(newResource);
+            client.configMaps().inNamespace(NAMESPACE).resource(newResource).create();
+            client.configMaps().inNamespace(NAMESPACE).resource(newResource).createOrReplace();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

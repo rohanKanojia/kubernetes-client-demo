@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefin
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinitionBuilder;
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinitionFluent;
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.JSONSchemaProps;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
 import java.io.IOException;
@@ -43,11 +43,11 @@ public class CustomResourceSchemaValidation {
                 .endSpec()
                 .build();
 
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
-            client.apiextensions().v1beta1().customResourceDefinitions().createOrReplace(customResourceDefinition);
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
+            client.apiextensions().v1beta1().customResourceDefinitions().resource(customResourceDefinition).createOrReplace();
             logger.log(Level.INFO, "CRD created once");
             // This will always fail
-            client.apiextensions().v1beta1().customResourceDefinitions().createOrReplace(customResourceDefinition);
+            client.apiextensions().v1beta1().customResourceDefinitions().resource(customResourceDefinition).createOrReplace();
             logger.log(Level.INFO, "CRD created twice");
         }
 //        // To make this test idempotent

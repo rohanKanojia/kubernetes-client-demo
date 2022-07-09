@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import io.fabric8.kubernetes.api.builder.TypedVisitor;
 import io.fabric8.kubernetes.api.model.PodTemplateSpecBuilder;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
 public class RollingUpdateDemo {
@@ -18,13 +18,14 @@ public class RollingUpdateDemo {
 		String namespace = "default";
 		String redisYamlFile = System.getProperty("user.dir")
 				+ "/src/main/resources/postgres-deployment.yml";
-		try (KubernetesClient client = new DefaultKubernetesClient()) {
+		try (KubernetesClient client = new KubernetesClientBuilder().build()) {
 			Deployment aDeployment = client.apps().deployments()
 					.inNamespace(namespace)
 					.load(new FileInputStream(redisYamlFile)).get();
 
 			client.apps().deployments().inNamespace(namespace)
-					.create(aDeployment);
+					.resource(aDeployment)
+					.create();
 
 			logger.log(Level.INFO, "Successfully created deployment");
 			Thread.sleep(20 * 1000);

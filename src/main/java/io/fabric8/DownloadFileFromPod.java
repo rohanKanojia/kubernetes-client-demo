@@ -1,6 +1,6 @@
 package io.fabric8;
 
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
 import java.io.File;
@@ -8,7 +8,7 @@ import java.nio.file.Path;
 
 public class DownloadFileFromPod {
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             // Path Where to copy file to local storage
             Path downloadToPath = new File("/home/rohaan/Downloads/quarkus-1.0.0-runner.jar").toPath();
             // Using Kubernetes Client to copy file from pod

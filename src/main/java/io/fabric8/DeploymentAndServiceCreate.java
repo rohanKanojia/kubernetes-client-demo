@@ -5,20 +5,20 @@ import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceBuilder;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
 public class DeploymentAndServiceCreate {
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             // Create Deployment
             String namespace = "default";
             Deployment deployment = createNewDeployment("hello-dep");
-            client.apps().deployments().inNamespace(namespace).createOrReplace(deployment);
+            client.apps().deployments().inNamespace(namespace).resource(deployment).createOrReplace();
 
             // Create Service
             Service service = createNewService("hello-dep");
-            client.services().inNamespace(namespace).createOrReplace(service);
+            client.services().inNamespace(namespace).resource(service).createOrReplace();
 
         }
     }

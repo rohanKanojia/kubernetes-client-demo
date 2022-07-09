@@ -1,14 +1,14 @@
 package io.fabric8.openshift;
 
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.openshift.api.model.monitoring.v1.PrometheusRule;
 import io.fabric8.openshift.api.model.monitoring.v1.PrometheusRuleBuilder;
 import io.fabric8.openshift.api.model.monitoring.v1.PrometheusRuleList;
-import io.fabric8.openshift.client.DefaultOpenShiftClient;
 import io.fabric8.openshift.client.OpenShiftClient;
 
 public class PrometheusRuleTest {
     public static void main(String[] args) {
-        try (OpenShiftClient client = new DefaultOpenShiftClient()) {
+        try (OpenShiftClient client = new KubernetesClientBuilder().build().adapt(OpenShiftClient.class)) {
             PrometheusRule prometheusRule = new PrometheusRuleBuilder()
                     .withNewMetadata().withName("foo").endMetadata()
                     .withNewSpec()
@@ -16,13 +16,13 @@ public class PrometheusRuleTest {
                     .withName("./example-rules")
                     .addNewRule()
                     .withAlert("ExampleAlert")
-                    .withNewExpr().withStrVal("vector(1)").endExpr()
+                    .withNewExpr().withValue("vector(1)").endExpr()
                     .endRule()
                     .endGroup()
                     .endSpec()
                     .build();
 
-            client.monitoring().prometheusRules().inNamespace("rokumar").createOrReplace(prometheusRule);
+            client.monitoring().prometheusRules().inNamespace("rokumar").resource(prometheusRule).createOrReplace();
             System.out.println("Created");
 
             PrometheusRuleList prometheusRuleList = client.monitoring().prometheusRules().inNamespace("rokumar").list();

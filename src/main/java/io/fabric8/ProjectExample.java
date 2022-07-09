@@ -2,7 +2,7 @@ package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.NamespaceList;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 
@@ -18,7 +18,7 @@ public class ProjectExample {
     public static void main(String args[]) {
 
         try {
-            KubernetesClient client = new DefaultKubernetesClient();
+            KubernetesClient client = new KubernetesClientBuilder().build();
 
             NamespaceList namespaceList = client.namespaces().withLabels(Collections.singletonMap("name", "rohan")).list();
 

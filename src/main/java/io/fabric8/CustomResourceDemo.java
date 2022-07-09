@@ -3,7 +3,7 @@ package io.fabric8;
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinition;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.ConfigBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
 
@@ -17,9 +17,9 @@ public class CustomResourceDemo {
         Config config = new ConfigBuilder()
                 .withMasterUrl("https://192.168.99.100:8443")
                 .build();
-        try (final KubernetesClient client = new DefaultKubernetesClient(config)) {
+        try (final KubernetesClient client = new KubernetesClientBuilder().withConfig(config).build()) {
             CustomResourceDefinition crd = client.apiextensions().v1beta1().customResourceDefinitions().load(CustomResourceDemo.class.getResourceAsStream("/hello-crd.yml")).get();
-            client.apiextensions().v1beta1().customResourceDefinitions().create(crd);
+            client.apiextensions().v1beta1().customResourceDefinitions().resource(crd).create();
             log("Created Custom Resource Definition");
 
             CustomResourceDefinitionContext myCrdContext = new CustomResourceDefinitionContext.Builder()

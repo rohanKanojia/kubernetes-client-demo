@@ -9,7 +9,7 @@ import io.fabric8.kubernetes.api.builder.TypedVisitor;
 import io.fabric8.kubernetes.api.model.ObjectMetaBuilder;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.Watch;
@@ -21,7 +21,7 @@ public class WatchDemo {
 			.getName());
 
 	public static void main(String[] args) {
-		KubernetesClient client = new DefaultKubernetesClient();
+		KubernetesClient client = new KubernetesClientBuilder().build();
 		String currentNamespace = client.getNamespace();
 		try {
 			Pod pod1 = new PodBuilder().withNewMetadata()
@@ -29,7 +29,7 @@ public class WatchDemo {
 					.addNewContainer().withName("nginx").withImage("nginx")
 					.endContainer().endSpec().build();
 
-			client.pods().inNamespace(currentNamespace).create(pod1);
+			client.pods().inNamespace(currentNamespace).resource(pod1).create();
 
 			final CountDownLatch latch = new CountDownLatch(1);
 			Watch watch = client.pods().inNamespace(currentNamespace)

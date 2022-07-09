@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 
@@ -18,12 +18,12 @@ public class PodDemo {
 	private static final Logger logger = Logger.getLogger(PodDemo.class
 			.getName());
 
-	public static void main(String args[]) throws InterruptedException {
+  public static void main(String[] args) {
 		String namespace = "default";
 		String redisYamlFile = System.getProperty("user.dir") + "/src/main/resources/test-redis.yml";
 
 		try {
-			final KubernetesClient client = new DefaultKubernetesClient();
+			final KubernetesClient client = new KubernetesClientBuilder().build();
 
 			Pod aPod = new PodBuilder().withNewMetadata().withName("demo-pod1")
 					.endMetadata().withNewSpec().addNewContainer()
@@ -35,7 +35,7 @@ public class PodDemo {
 			 * Creating a simple pod from Builder.
 			 */
 			logger.log(Level.INFO, "Creating pod demo-pod1");
-			client.pods().inNamespace(namespace).create(aPod);
+			client.pods().inNamespace(namespace).resource(aPod).create();
 			logger.log(Level.INFO, "Successfully created pod");
 
 			/*
@@ -43,7 +43,7 @@ public class PodDemo {
 			 */
 			logger.log(Level.INFO, redisYamlFile);
 			Pod pod2 = client.pods().inNamespace(namespace).load(new FileInputStream(redisYamlFile)).get();
-			client.pods().inNamespace(namespace).create(pod2);
+			client.pods().inNamespace(namespace).resource(pod2).create();
 			logger.log(Level.INFO, "created " + pod2.getMetadata().getName());
 
 			client.close();

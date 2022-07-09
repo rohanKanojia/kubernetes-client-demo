@@ -2,12 +2,12 @@ package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.admissionregistration.v1.ValidatingWebhookConfiguration;
 import io.fabric8.kubernetes.api.model.admissionregistration.v1.ValidatingWebhookConfigurationBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
 public class ValidatingWebhookConfigurationTest {
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             ValidatingWebhookConfiguration vwc = new ValidatingWebhookConfigurationBuilder()
                     .withNewMetadata().withName("pod-policy.example.com").endMetadata()
                     .addNewWebhook()
@@ -31,7 +31,7 @@ public class ValidatingWebhookConfigurationTest {
                     .endWebhook()
                     .build();
 
-            client.admissionRegistration().v1().validatingWebhookConfigurations().create(vwc);
+            client.admissionRegistration().v1().validatingWebhookConfigurations().resource(vwc).create();
         }
     }
 }

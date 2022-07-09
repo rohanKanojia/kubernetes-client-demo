@@ -5,19 +5,19 @@ import io.fabric8.kubernetes.api.model.PersistentVolumeClaimBuilder;
 import io.fabric8.kubernetes.api.model.Quantity;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
 import java.util.Collections;
 
 public class CreateDeploymentPVC {
     public static void main(String[] args) {
-        try (KubernetesClient kubernetesClient = new DefaultKubernetesClient()) {
+        try (KubernetesClient kubernetesClient = new KubernetesClientBuilder().build()) {
             PersistentVolumeClaim pvc = createNewPvc();
             Deployment deployment = createNewDeployment();
 
-            //kubernetesClient.persistentVolumeClaims().inNamespace("default").createOrReplace(pvc);
-            kubernetesClient.apps().deployments().inNamespace("default").createOrReplace(deployment);
+            kubernetesClient.persistentVolumeClaims().inNamespace("default").resource(pvc).createOrReplace();
+            kubernetesClient.apps().deployments().inNamespace("default").resource(deployment).createOrReplace();
         }
     }
 

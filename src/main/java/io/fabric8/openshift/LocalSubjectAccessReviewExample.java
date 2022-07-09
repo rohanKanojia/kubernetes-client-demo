@@ -1,14 +1,14 @@
 package io.fabric8.openshift;
 
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.openshift.api.model.LocalSubjectAccessReview;
 import io.fabric8.openshift.api.model.LocalSubjectAccessReviewBuilder;
 import io.fabric8.openshift.api.model.SubjectAccessReviewResponse;
-import io.fabric8.openshift.client.DefaultOpenShiftClient;
 import io.fabric8.openshift.client.OpenShiftClient;
 
 public class LocalSubjectAccessReviewExample {
     public static void main(String[] args) {
-        try (OpenShiftClient client = new DefaultOpenShiftClient()) {
+        try (OpenShiftClient client = new KubernetesClientBuilder().build().adapt(OpenShiftClient.class)) {
             LocalSubjectAccessReview lsar = new LocalSubjectAccessReviewBuilder()
                     .withNamespace("rokumar")
                     .withUser("kubeadmin")

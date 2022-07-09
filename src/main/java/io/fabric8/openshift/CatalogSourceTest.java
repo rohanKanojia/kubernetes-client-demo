@@ -3,12 +3,12 @@ package io.fabric8.openshift;
 import io.fabric8.openshift.api.model.operatorhub.v1alpha1.CatalogSource;
 import io.fabric8.openshift.api.model.operatorhub.v1alpha1.CatalogSourceBuilder;
 import io.fabric8.openshift.api.model.operatorhub.v1alpha1.CatalogSourceList;
-import io.fabric8.openshift.client.DefaultOpenShiftClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.openshift.client.OpenShiftClient;
 
 public class CatalogSourceTest {
     public static void main(String[] args) {
-        try (OpenShiftClient client = new DefaultOpenShiftClient()) {
+        try (OpenShiftClient client = new KubernetesClientBuilder().build().adapt(OpenShiftClient.class)) {
             CatalogSource cs = new CatalogSourceBuilder()
                     .withNewMetadata().withName("foo").endMetadata()
                     .withNewSpec()
@@ -18,7 +18,7 @@ public class CatalogSourceTest {
                     .withPublisher("Fabric8")
                     .endSpec()
                     .build();
-            client.operatorHub().catalogSources().inNamespace("default").createOrReplace(cs);
+            client.operatorHub().catalogSources().inNamespace("default").resource(cs).createOrReplace();
             System.out.println("Created.");
 
             CatalogSourceList csList = client.operatorHub().catalogSources().inNamespace("default").withLabel("foo", "bar").list();

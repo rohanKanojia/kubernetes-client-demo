@@ -1,6 +1,6 @@
 package io.fabric8;
 
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class DeploymentRollingUpdateMultipleContainers {
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             Map<String, String> containerToImageMap = new HashMap<>();
             containerToImageMap.put("nginx", "stable-perl");
             containerToImageMap.put("hello", "hello-world:linux");

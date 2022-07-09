@@ -2,7 +2,7 @@ package io.fabric8;
 
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.openshift.api.model.Project;
-import io.fabric8.openshift.client.DefaultOpenShiftClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.openshift.client.OpenShiftClient;
 
 import java.text.ParseException;
@@ -21,7 +21,7 @@ public class FindAgeOfProject {
 
     public static void main(String args[]) {
 
-        try (OpenShiftClient openshiftClient = new DefaultOpenShiftClient()) {
+        try (OpenShiftClient openshiftClient = new KubernetesClientBuilder().build().adapt(OpenShiftClient.class)) {
             Project project = openshiftClient.projects().withName("myproject").get();
 
             System.out.println(project.getMetadata().getCreationTimestamp());

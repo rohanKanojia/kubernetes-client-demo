@@ -4,25 +4,24 @@ import io.fabric8.crd.Book;
 import io.fabric8.crd.BookSpec;
 import io.fabric8.kubernetes.api.model.KubernetesResourceList;
 import io.fabric8.kubernetes.api.model.ObjectMetaBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.MixedOperation;
 import io.fabric8.kubernetes.client.dsl.Resource;
 
 public class BookCreate {
-    private static MixedOperation<Book, KubernetesResourceList<Book>, Resource<Book>> bookClient = null;
 
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             // Create Book Client
-            bookClient = client.resources(Book.class);
+            MixedOperation<Book, KubernetesResourceList<Book>, Resource<Book>> bookClient = client.resources(Book.class);
 
             // Create New Book Object
             Book book = createNewBook("kubernetes-patterns", "Kubernetes Patterns",
                     "Ibryam, Bilgin; Huß, Roland", "9781492050285");
 
             // Apply Book object in Kubernetes
-            bookClient.inNamespace("default").create(book);
+            bookClient.inNamespace("default").resource(book).create();
         }
     }
 

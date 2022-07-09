@@ -2,14 +2,14 @@ package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
 import java.util.Collections;
 
 public class SimpleDeploymentCreate {
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             Deployment deployment = new DeploymentBuilder()
                     .withNewMetadata().withName("nginx-deployment").addToLabels("app", "nginx").endMetadata()
                     .withNewSpec()
@@ -30,7 +30,7 @@ public class SimpleDeploymentCreate {
                     .endSpec()
                     .build();
 
-            client.apps().deployments().inNamespace("rokumar").createOrReplace(deployment);
+            client.apps().deployments().inNamespace("rokumar").resource(deployment).createOrReplace();
         }
     }
 }

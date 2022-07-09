@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.ResourceQuotaSpecBuilder;
 import io.fabric8.openshift.api.model.ClusterResourceQuota;
 import io.fabric8.openshift.api.model.ClusterResourceQuotaBuilder;
 import io.fabric8.openshift.api.model.ClusterResourceQuotaList;
-import io.fabric8.openshift.client.DefaultOpenShiftClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.openshift.client.OpenShiftClient;
 
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class ClusterResourceQuotaTest {
     public static void main(String[] args) {
-        try (OpenShiftClient client = new DefaultOpenShiftClient()) {
+        try (OpenShiftClient client = new KubernetesClientBuilder().build().adapt(OpenShiftClient.class)) {
             Map<String, Quantity> hard = new HashMap<>();
             hard.put("pods", new Quantity("10"));
             hard.put("secrets", new Quantity("20"));
@@ -29,7 +29,7 @@ public class ClusterResourceQuotaTest {
                     .endSpec()
                     .build();
 
-            client.quotas().clusterResourceQuotas().createOrReplace(acrq);
+            client.quotas().clusterResourceQuotas().resource(acrq).createOrReplace();
 
             ClusterResourceQuotaList clusterResourceQuotaList = client.quotas().clusterResourceQuotas().list();
             client.quotas().clusterResourceQuotas().withName("foo").delete();

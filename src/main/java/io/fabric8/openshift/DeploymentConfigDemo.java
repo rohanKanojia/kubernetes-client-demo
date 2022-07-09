@@ -3,7 +3,7 @@ package io.fabric8.openshift;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.openshift.api.model.DeploymentConfig;
 import io.fabric8.openshift.api.model.DeploymentConfigBuilder;
-import io.fabric8.openshift.client.DefaultOpenShiftClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.openshift.client.OpenShiftClient;
 
 import java.util.logging.Level;
@@ -12,9 +12,9 @@ import java.util.logging.Logger;
 public class DeploymentConfigDemo {
 	private static final Logger logger = Logger.getLogger(DeploymentConfigDemo.class.getName());
 	
-	public static void main(String args[]) {
+  public static void main(String[] args) {
 		try {
-			final OpenShiftClient client = new DefaultOpenShiftClient();
+			final OpenShiftClient client = new KubernetesClientBuilder().build().adapt(OpenShiftClient.class);
 			String namespace = client.getNamespace();
 			DeploymentConfig deploymentConfig1 = new DeploymentConfigBuilder().withNewMetadata()
 					.withName("deployment1").endMetadata().withNewSpec()
@@ -33,7 +33,7 @@ public class DeploymentConfigDemo {
 					.endTemplate().endSpec().build();
 			
 			logger.log(Level.INFO, "Creating deployment config....");
-			client.deploymentConfigs().inNamespace(namespace).create(deploymentConfig1);
+			client.deploymentConfigs().inNamespace(namespace).resource(deploymentConfig1).create();
 			
 			client.close();
 		} catch (KubernetesClientException exception1) {

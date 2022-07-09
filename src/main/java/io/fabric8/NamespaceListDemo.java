@@ -1,7 +1,7 @@
 package io.fabric8;
 
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 
 import java.util.logging.Level;
@@ -16,7 +16,7 @@ public class NamespaceListDemo {
 
 	public static void main(String[] args) {
 		logger.log(Level.INFO, "Creating Kuberntes client");
-		try (KubernetesClient client = new DefaultKubernetesClient()) {
+		try (KubernetesClient client = new KubernetesClientBuilder().build()) {
 			logger.log(Level.INFO, "Kubernetes client successfully created");
 
 			// List all namespaces

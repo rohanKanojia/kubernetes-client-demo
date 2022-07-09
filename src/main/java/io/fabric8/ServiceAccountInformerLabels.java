@@ -1,8 +1,8 @@
 package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.ServiceAccount;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer;
 
@@ -10,7 +10,7 @@ import java.util.Collections;
 
 public class ServiceAccountInformerLabels {
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             SharedIndexInformer<ServiceAccount> serviceAccountSharedIndexInformer = client.serviceAccounts().withLabels(Collections.singletonMap("foo", "bar")).inform(new ResourceEventHandler<ServiceAccount>() {
                 @Override
                 public void onAdd(ServiceAccount serviceAccount) {

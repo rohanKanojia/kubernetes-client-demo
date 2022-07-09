@@ -4,7 +4,7 @@ import io.fabric8.kubernetes.api.model.GenericKubernetesResource;
 import io.fabric8.kubernetes.api.model.GenericKubernetesResourceBuilder;
 import io.fabric8.kubernetes.api.model.GenericKubernetesResourceList;
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinition;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
@@ -22,14 +22,14 @@ public class RawCustomResourcesDemoBlog {
 
     public static void main(String[] args) throws InterruptedException {
 
-        try (final KubernetesClient client = new DefaultKubernetesClient()) {
+        try (final KubernetesClient client = new KubernetesClientBuilder().build()) {
             String namespace = "default";
 
             // Load CRD as object from YAML
             CustomResourceDefinition animalCrd = client.apiextensions().v1beta1().customResourceDefinitions()
                     .load(RawCustomResourcesDemoBlog.class.getResourceAsStream("/animals-crd.yml")).get();
             // Apply CRD object onto your Kubernetes cluster
-            client.apiextensions().v1beta1().customResourceDefinitions().create(animalCrd);
+            client.apiextensions().v1beta1().customResourceDefinitions().resource(animalCrd).create();
 
             CustomResourceDefinitionContext animalCrdContext = new CustomResourceDefinitionContext.Builder()
                     .withName("animals.jungle.example.com")
@@ -44,14 +44,14 @@ public class RawCustomResourcesDemoBlog {
                     .genericKubernetesResources(animalCrdContext)
                     .load(RawCustomResourcesDemoBlog.class.getResourceAsStream("/seal-cr.yml"))
                     .get();
-            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).create(cr1);
+            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).resource(cr1).create();
 
             GenericKubernetesResource cr2 = new GenericKubernetesResourceBuilder()
                 .withNewMetadata().withName("bison").endMetadata()
                 .withAdditionalProperties(Collections.singletonMap("spec", Collections.singletonMap("image", "strong-bison-image")))
                 .build();
 
-            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).create(cr2);
+            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).resource(cr2).create();
 
             // Creating from Raw JSON String
             String crBasicString = "{" +
@@ -68,7 +68,7 @@ public class RawCustomResourcesDemoBlog {
             GenericKubernetesResource cr3 = client.genericKubernetesResources(animalCrdContext)
                 .load(crBasicString)
                 .get();
-            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).create(cr3);
+            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).resource(cr3).create();
 
 
             // Listing Custom resources in a specific namespace
@@ -88,14 +88,14 @@ public class RawCustomResourcesDemoBlog {
             oldAnimal.setAdditionalProperties(Collections.singletonMap("spec", Collections.singletonMap("image", "my-silly-mongoose-image:v2")));
             oldAnimal.getMetadata().setLabels(Collections.singletonMap("updated", "true"));
 
-            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).withName("mongoose").replace(oldAnimal);
+            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).resource(oldAnimal).replace();
 
             // Deleting a custom resource
             client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).withName("seal").delete();
 
             // Watching a custom resource
             logger.info("Watching custom resources now, open for 10 minutes...");
-            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).watch(new Watcher<GenericKubernetesResource>() {
+            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).watch(new Watcher<>() {
                 @Override
                 public void eventReceived(Action action, GenericKubernetesResource resource) {
                     try {
@@ -106,7 +106,8 @@ public class RawCustomResourcesDemoBlog {
                 }
 
                 @Override
-                public void onClose() { }
+                public void onClose() {
+                }
 
                 @Override
                 public void onClose(WatcherException e) {

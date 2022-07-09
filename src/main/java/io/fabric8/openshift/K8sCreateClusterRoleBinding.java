@@ -13,12 +13,12 @@ import io.fabric8.openshift.api.model.LocalSubjectAccessReviewBuilder;
 import io.fabric8.openshift.api.model.SubjectAccessReviewResponse;
 import io.fabric8.openshift.api.model.SubjectRulesReview;
 import io.fabric8.openshift.api.model.SubjectRulesReviewBuilder;
-import io.fabric8.openshift.client.DefaultOpenShiftClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.openshift.client.OpenShiftClient;
 
 public class K8sCreateClusterRoleBinding {
     public static void main(String[] args) {
-        try (OpenShiftClient client = new DefaultOpenShiftClient()) {
+        try (OpenShiftClient client = new KubernetesClientBuilder().build().adapt(OpenShiftClient.class)) {
 //            ClusterRoleBinding clusterRoleBinding = client.rbac().clusterRoleBindings()
 //                    .load(K8sCreateClusterRoleBinding.class.getResourceAsStream("/test-clusterrolebinding.yml"))
 //                    .get();

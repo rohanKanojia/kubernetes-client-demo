@@ -1,13 +1,13 @@
 package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.GenericKubernetesResource;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
 
 public class GenericKubernetesResourceExample {
   public static void main(String[] args) {
-    try (KubernetesClient client = new DefaultKubernetesClient()) {
+    try (KubernetesClient client = new KubernetesClientBuilder().build()) {
       CustomResourceDefinitionContext context = new CustomResourceDefinitionContext.Builder()
           .withGroup("sparkoperator.k8s.io")
           .withScope("Namespaced")
@@ -21,7 +21,8 @@ public class GenericKubernetesResourceExample {
 
       client.genericKubernetesResources(context)
           .inNamespace("default")
-          .create(cr);
+          .resource(cr)
+          .create();
     }
   }
 }

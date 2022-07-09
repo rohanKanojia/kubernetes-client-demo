@@ -3,7 +3,7 @@ package io.fabric8.demos;
 import io.fabric8.crd.Book;
 import io.fabric8.crd.BookStatus;
 import io.fabric8.kubernetes.api.model.KubernetesResourceList;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.MixedOperation;
 import io.fabric8.kubernetes.client.dsl.Resource;
@@ -12,7 +12,7 @@ public class BookStatusUpdate {
     private static MixedOperation<Book, KubernetesResourceList<Book>, Resource<Book>> bookClient;
 
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             // Create Book Client
             bookClient = client.resources(Book.class);
 
@@ -21,7 +21,7 @@ public class BookStatusUpdate {
 
             // Update Book Status
             book.setStatus(createBookStatus(true, "Rohan Kumar"));
-            bookClient.inNamespace("default").withName("effective-java").replaceStatus(book);
+            bookClient.inNamespace("default").resource(book).replaceStatus();
         }
     }
 

@@ -15,8 +15,8 @@
  */
 package io.fabric8;
 
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ public class DeploymentRolloutExample {
   private static final Logger logger = LoggerFactory.getLogger(DeploymentRolloutExample.class);
 
   public static void main(String[] args) {
-    try (KubernetesClient client = new DefaultKubernetesClient()) {
+    try (KubernetesClient client = new KubernetesClientBuilder().build()) {
       client.apps().deployments().inNamespace("default")
               .withName("nginx-deployment")
               .rolling().updateImage("nginx:latest");

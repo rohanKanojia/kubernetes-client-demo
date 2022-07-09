@@ -1,10 +1,7 @@
 package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.Affinity;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
-import io.fabric8.kubernetes.client.internal.SerializationUtils;
 import io.fabric8.kubernetes.client.utils.Serialization;
 
 import java.util.logging.Level;
@@ -14,7 +11,7 @@ public class AffinityLoadDemo {
     private static final Logger logger = Logger.getLogger(AffinityLoadDemo.class
             .getName());
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 
         try {
             Affinity affinity = Serialization

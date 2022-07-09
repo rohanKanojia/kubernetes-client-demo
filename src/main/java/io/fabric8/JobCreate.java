@@ -2,12 +2,12 @@ package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
 public class JobCreate {
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             Job job = new JobBuilder()
                     .withNewMetadata().withName("pi").endMetadata()
                     .withNewSpec()
@@ -25,7 +25,7 @@ public class JobCreate {
                     .endSpec()
                     .build();
 
-            client.batch().v1().jobs().inNamespace("default").createOrReplace(job);
+            client.batch().v1().jobs().inNamespace("default").resource(job).createOrReplace();
         }
     }
 }

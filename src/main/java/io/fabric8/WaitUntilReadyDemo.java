@@ -2,7 +2,7 @@ package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.LogWatch;
 
@@ -16,7 +16,7 @@ public class WaitUntilReadyDemo {
             .getName());
 
     public static void main(String[] args) throws InterruptedException {
-        try (final KubernetesClient client = new DefaultKubernetesClient()) {
+        try (final KubernetesClient client = new KubernetesClientBuilder().build()) {
             Pod pod = new PodBuilder()
                     .withNewMetadata().withName("myapp-pod").withLabels(Collections.singletonMap("app", "myapp-pod")).endMetadata()
                     .withNewSpec()
@@ -34,7 +34,7 @@ public class WaitUntilReadyDemo {
                     .build();
 
             String namespace = "default";
-            pod = client.pods().inNamespace(namespace).create(pod);
+            pod = client.pods().inNamespace(namespace).resource(pod).create();
             log("Pod created, waiting for it to get ready");
             client.resource(pod).inNamespace(namespace).waitUntilReady(10, TimeUnit.SECONDS);
             log("Pod is ready now.");

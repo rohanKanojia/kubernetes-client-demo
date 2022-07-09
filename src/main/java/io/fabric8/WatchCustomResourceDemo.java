@@ -1,7 +1,7 @@
 package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.GenericKubernetesResource;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
@@ -17,7 +17,7 @@ public class WatchCustomResourceDemo {
     private static final Logger logger = LoggerFactory.getLogger(WatchCustomResourceDemo.class);
 
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             String namespace = "default";
             final CountDownLatch closeLatch = new CountDownLatch(1);
             CustomResourceDefinitionContext crdContext = new CustomResourceDefinitionContext.Builder()

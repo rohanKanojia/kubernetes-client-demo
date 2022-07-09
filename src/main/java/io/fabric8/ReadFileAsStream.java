@@ -1,6 +1,6 @@
 package io.fabric8;
 
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
 import java.io.BufferedReader;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class ReadFileAsStream {
     public static void main(String[] args) throws IOException {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             try (InputStream is = client.pods()
                     .inNamespace("default")
                     .withName("quarkus-84dc4885b-tsck6")

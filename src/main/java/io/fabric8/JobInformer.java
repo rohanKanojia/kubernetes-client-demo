@@ -1,7 +1,7 @@
 package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer;
@@ -12,7 +12,7 @@ public class JobInformer {
     private static final Logger logger = Logger.getLogger(JobInformer.class.getName());
 
     public static void main(String[] args) throws InterruptedException {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
 
             // Create namespaced instance for Job Informer
             SharedIndexInformer<Job> jobSharedIndexInformer = client.batch().v1().jobs()

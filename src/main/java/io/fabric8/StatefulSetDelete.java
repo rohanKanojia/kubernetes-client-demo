@@ -12,11 +12,9 @@ import io.fabric8.kubernetes.api.model.ResourceRequirementsBuilder;
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetBuilder;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetSpecBuilder;
-import io.fabric8.kubernetes.client.Config;
-import io.fabric8.kubernetes.client.ConfigBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
-import io.fabric8.kubernetes.client.okhttp.OkHttpClientFactory;
-import io.fabric8.kubernetes.client.okhttp.OkHttpClientImpl;
+import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
+
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -24,12 +22,9 @@ public class StatefulSetDelete {
 
     public static void main(String[] argv) throws Exception {
 
-        final Config config = new ConfigBuilder().build();
-        OkHttpClientImpl httpClientImpl = new OkHttpClientFactory().createHttpClient(config);
-
         final String statefulSetName = "test" + System.currentTimeMillis();
-        try (final DefaultKubernetesClient client = new DefaultKubernetesClient(httpClientImpl, config)) {
-            client.apps().statefulSets().create(createStatefulSet(statefulSetName));
+        try (final KubernetesClient client = new KubernetesClientBuilder().build()) {
+            client.apps().statefulSets().resource(createStatefulSet(statefulSetName)).create();
 
             StatefulSet statefulSet = client.apps().statefulSets().withName(statefulSetName).waitUntilReady(5, TimeUnit.MINUTES);
 

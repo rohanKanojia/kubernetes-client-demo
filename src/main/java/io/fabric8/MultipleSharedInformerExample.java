@@ -2,7 +2,7 @@ package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer;
@@ -19,7 +19,7 @@ public class MultipleSharedInformerExample {
     private static final String NAMESPACE_PREFIX = "multi-";
 
     public static void main(String[] args) throws InterruptedException {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             Map<String, SharedIndexInformer<Pod>> namespaceToInformerMap = new HashMap<>();
             logger.info("Informer factory initialized.");
             for (int i = 10; i < 30; i++) {

@@ -2,12 +2,12 @@ package io.fabric8.openshift;
 
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobBuilder;
-import io.fabric8.openshift.client.DefaultOpenShiftClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.openshift.client.OpenShiftClient;
 
 public class JobCreateExample {
     public static void main(String[] args) {
-        try (OpenShiftClient client = new DefaultOpenShiftClient()) {
+        try (OpenShiftClient client = new KubernetesClientBuilder().build().adapt(OpenShiftClient.class)) {
             Job job = new JobBuilder()
                     .withNewMetadata().withName("pi").endMetadata()
                     .withNewSpec()
@@ -25,7 +25,7 @@ public class JobCreateExample {
                     .endSpec()
                     .build();
 
-            client.batch().v1().jobs().inNamespace("default").createOrReplace(job);
+            client.batch().v1().jobs().inNamespace("default").resource(job).createOrReplace();
         }
     }
 }

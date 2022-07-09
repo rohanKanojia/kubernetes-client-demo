@@ -1,6 +1,6 @@
 package io.fabric8;
 
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.LocalPortForward;
 import org.slf4j.Logger;
@@ -12,7 +12,7 @@ public class PortForwardDemo {
     private static final Logger logger = LoggerFactory.getLogger(PortForwardDemo.class);
 
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             String podName = "getting-started-7bc7b9d47b-jndfs";
 
             logger.info("Starting Port Forward for pod: {} {} -> {}", podName, 80, 8080);

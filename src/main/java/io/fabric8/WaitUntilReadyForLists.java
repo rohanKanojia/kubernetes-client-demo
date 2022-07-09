@@ -1,25 +1,24 @@
 package io.fabric8;
 
-import io.fabric8.kubernetes.api.model.KubernetesListBuilder;
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.api.model.PodBuilder;
-import io.fabric8.kubernetes.api.model.Secret;
-import io.fabric8.kubernetes.api.model.SecretBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClient;
-
-import java.io.IOException;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import io.fabric8.kubernetes.api.model.KubernetesListBuilder;
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.PodBuilder;
+import io.fabric8.kubernetes.api.model.Secret;
+import io.fabric8.kubernetes.api.model.SecretBuilder;
+import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
+
 public class WaitUntilReadyForLists {
     private static final Logger logger = Logger.getLogger(WaitUntilReadyForLists.class
             .getName());
 
-    public static void main(String args[]) throws IOException, InterruptedException {
-        try (final KubernetesClient client = new DefaultKubernetesClient()) {
+    public static void main(String[] args) throws InterruptedException {
+        try (final KubernetesClient client = new KubernetesClientBuilder().build()) {
             String namespace = "default";
             Pod pod = new PodBuilder()
                     .withNewMetadata().withName("p2").withLabels(Collections.singletonMap("app", "p2")).endMetadata()
@@ -61,9 +60,9 @@ public class WaitUntilReadyForLists {
                     .build();
 
             logger.log(Level.INFO, "creating resources");
-            pod = client.pods().inNamespace(namespace).create(pod);
-            secondPod = client.pods().inNamespace(namespace).create(secondPod);
-            mySecret = client.secrets().inNamespace(namespace).create(mySecret);
+            pod = client.pods().inNamespace(namespace).resource(pod).create();
+            secondPod = client.pods().inNamespace(namespace).resource(secondPod).create();
+            mySecret = client.secrets().inNamespace(namespace).resource(mySecret).create();
 
             logger.log(Level.INFO, "Waiting for resources until they become ready.");
             // For waiting for single resource use this.
@@ -71,7 +70,7 @@ public class WaitUntilReadyForLists {
             logger.log(Level.INFO, "Resources Ready - OK");
 
             logger.log(Level.INFO, "waiting....");
-            Thread.sleep(15 * 1000);
+            Thread.sleep(15 * 1000L);
 
             logger.log(Level.INFO, "Cleaning up now...");
             // Cleanup

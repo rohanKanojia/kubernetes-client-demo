@@ -1,13 +1,14 @@
 package io.fabric8;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import okhttp3.Response;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.dsl.ExecListener;
@@ -17,8 +18,8 @@ public class ExecDemo {
 	private static final Logger logger = Logger.getLogger(ExecDemo.class
 			.getName());
 
-	public static void main(String[] args) throws InterruptedException {
-		try (KubernetesClient client = new DefaultKubernetesClient()) {
+  public static void main(String[] args) {
+		try (KubernetesClient client = new KubernetesClientBuilder().build()) {
 			String namespace = "default";
 			Pod pod1 = new PodBuilder().withNewMetadata().withName("pod1")
 					.endMetadata().withNewSpec().addNewContainer()
@@ -32,7 +33,7 @@ public class ExecDemo {
 					.withValue("password").endEnv().endContainer().endSpec()
 					.build();
 			
-			client.pods().inNamespace(namespace).createOrReplace(pod1);
+			client.pods().inNamespace(namespace).resource(pod1).createOrReplace();
 			logger.log(Level.INFO, "created pod");
 
 			logger.log(Level.INFO, "Waiting for the pod to start");
@@ -40,16 +41,20 @@ public class ExecDemo {
 
 			logger.log(Level.INFO, "executing a simple command");
 			ExecWatch execWatch = client.pods().inNamespace(namespace)
-					.withName("pod1").readingInput(System.in)
+					.withName("pod1").redirectingInput()
 					.writingOutput(System.out).writingError(System.err)
 					.withTTY().usingListener(new SimpleListener()).exec("ls");
 
-			Thread.sleep(10 * 1000);
+			OutputStream input = execWatch.getInput();
+			input.write("hello".getBytes());
+			input.flush();
+
 			execWatch.close();
 
+			execWatch.exitCode().join();
 			client.pods().inNamespace(namespace).withName("pod1").delete();
 			logger.info("Closing client now...");
-		} catch (KubernetesClientException exception) {
+		} catch (KubernetesClientException | IOException exception) {
 			exception.printStackTrace();
 		}
 	}

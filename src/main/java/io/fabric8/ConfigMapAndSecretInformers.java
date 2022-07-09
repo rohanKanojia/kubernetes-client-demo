@@ -2,7 +2,7 @@ package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.Secret;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer;
@@ -17,7 +17,7 @@ public class ConfigMapAndSecretInformers {
     private static final Logger logger = LoggerFactory.getLogger(ConfigMapAndSecretInformers.class.getName());
 
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             SharedInformerFactory informerFactory = client.informers();
             SharedIndexInformer<ConfigMap> configMapInformer = informerFactory.sharedIndexInformerFor(ConfigMap.class, 1 * 60 * 1000);
             SharedIndexInformer<Secret> secretInformer = informerFactory.sharedIndexInformerFor(Secret.class, 1 * 60 * 1000);

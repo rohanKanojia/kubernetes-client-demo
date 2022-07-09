@@ -5,7 +5,7 @@ import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer;
 import io.fabric8.kubernetes.client.informers.cache.Lister;
-import io.fabric8.openshift.client.DefaultOpenShiftClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.openshift.client.OpenShiftClient;
 
 import java.sql.Timestamp;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class InformerLister {
     public static void main(String[] args) {
-        try (OpenShiftClient client = new DefaultOpenShiftClient()) {
+        try (OpenShiftClient client = new KubernetesClientBuilder().build().adapt(OpenShiftClient.class)) {
             String namespace = "default";
             System.out.println(new Timestamp(System.currentTimeMillis()) + "ConfigMap informer started for namespace: " + namespace);
             SharedIndexInformer<ConfigMap> informer =client.configMaps().inNamespace(namespace).inform(new ResourceEventHandler<ConfigMap>() {

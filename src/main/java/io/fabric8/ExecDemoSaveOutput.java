@@ -1,6 +1,6 @@
 package io.fabric8;
 
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.ExecListener;
 import io.fabric8.kubernetes.client.dsl.ExecWatch;
@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ExecDemoSaveOutput {
     public static void main(String[] args) {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             final CountDownLatch execLatch = new CountDownLatch(1);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ExecWatch execWatch = client.pods().inNamespace("default").withName("spring-boot-camel-1-hl6xf")

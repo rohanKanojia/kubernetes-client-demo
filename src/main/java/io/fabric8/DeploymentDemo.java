@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 
@@ -18,7 +18,7 @@ public class DeploymentDemo {
 	private static final Logger logger = Logger.getLogger(DeploymentDemo.class.getName());
 	
 	public static void main(String[] args) {
-		try (final KubernetesClient client = new DefaultKubernetesClient()) {
+		try (final KubernetesClient client = new KubernetesClientBuilder().build()) {
 			String namespace = "default";
 			Deployment deployment1 = new DeploymentBuilder()
 					.withNewMetadata()
@@ -65,11 +65,11 @@ public class DeploymentDemo {
 					.build();
 			
 			logger.log(Level.INFO, "Creating deployment ....");
-			client.apps().deployments().inNamespace(namespace).create(deployment1);
+			client.apps().deployments().inNamespace(namespace).resource(deployment1).create();
 			logger.log(Level.INFO, "Deployment created..OK");
 			
 			// Wait for Deployment to come up
-			Thread.sleep(10 * 1000);
+			Thread.sleep(10 * 1000L);
 			client.apps().deployments().inNamespace(namespace)
 					.withName(deployment1.getMetadata().getName())
 					.waitUntilReady(1, TimeUnit.MINUTES);

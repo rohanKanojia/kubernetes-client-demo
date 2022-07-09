@@ -2,7 +2,7 @@ package io.fabric8;
 
 import io.fabric8.crd.CronTab;
 import io.fabric8.crd.CronTabList;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
@@ -11,7 +11,7 @@ import io.fabric8.kubernetes.client.dsl.Resource;
 
 public class TypedCustomResourceDemoBlog {
     public static void main(String[] args) throws InterruptedException {
-        try (KubernetesClient client = new DefaultKubernetesClient()) {
+        try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             MixedOperation<CronTab, CronTabList, Resource<CronTab>> cronTabClient = client.resources(CronTab.class, CronTabList.class);
 
             // Load CronTab CustomResource from file
@@ -19,8 +19,8 @@ public class TypedCustomResourceDemoBlog {
             CronTab cronTab2 = cronTabClient.load(TypedCustomResourceDemoBlog.class.getResourceAsStream("/crontab2.yml")).get();
 
             // Create CronTab
-            cronTabClient.inNamespace("default").create(cronTab1);
-            cronTabClient.inNamespace("default").create(cronTab2);
+            cronTabClient.inNamespace("default").resource(cronTab1).create();
+            cronTabClient.inNamespace("default").resource(cronTab2).create();
 
             // Get resource from API Server
             cronTab1 = cronTabClient.inNamespace("default").withName("my-new-cron-object").get();
@@ -32,23 +32,24 @@ public class TypedCustomResourceDemoBlog {
 
             // Update resource
             cronTab1.getSpec().setReplicas(5);
-            cronTabClient.inNamespace("default").withName("my-new-cron-object").patch(cronTab1);
+            cronTabClient.inNamespace("default").resource(cronTab1).patch();
             log("CronTab " + cronTab1.getMetadata().getName() + " updated.");
 
             // Delete CronTab
-            cronTabClient.inNamespace("default").delete(cronTab1);
+            cronTabClient.inNamespace("default").resource(cronTab1).delete();
             cronTabClient.inNamespace("default").withName("my-second-cron-object").delete();
             log("CronTabs successfully deleted");
 
 
-            cronTabClient.inNamespace("default").watch(new Watcher<CronTab>() {
+            cronTabClient.inNamespace("default").watch(new Watcher<>() {
                 @Override
                 public void eventReceived(Action action, CronTab cronTab) {
                     log(action.toString() + " " + cronTab.getMetadata().getName());
                 }
 
                 @Override
-                public void onClose() { }
+                public void onClose() {
+                }
 
                 @Override
                 public void onClose(WatcherException e) {
@@ -58,7 +59,7 @@ public class TypedCustomResourceDemoBlog {
             });
 
             log("Watch open for 60 seconds...");
-            Thread.sleep(60 * 1000);
+            Thread.sleep(60 * 1000L);
         }
     }
 

@@ -2,7 +2,7 @@ package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.GenericKubernetesResource;
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinition;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
 
@@ -15,11 +15,11 @@ public class SparkApplicationCustomResource {
     private static final Logger logger = Logger.getLogger(SparkApplicationCustomResource.class.getName());
 
     public static void main(String[] args) {
-        try (final KubernetesClient client = new DefaultKubernetesClient()) {
+            try (final KubernetesClient client = new KubernetesClientBuilder().build()) {
             CustomResourceDefinition sparkCrd = client.apiextensions().v1beta1().customResourceDefinitions()
                     .load(SparkApplicationCustomResource.class.getResourceAsStream("/sparkapplication-crd.yml"))
                     .get();
-            client.apiextensions().v1beta1().customResourceDefinitions().create(sparkCrd);
+            client.apiextensions().v1beta1().customResourceDefinitions().resource(sparkCrd).create();
             log("Custom Resource Definition " + sparkCrd.getMetadata().getName() + " created.");
 
             CustomResourceDefinitionContext customResourceDefinitionContext = new CustomResourceDefinitionContext.Builder()
@@ -46,7 +46,7 @@ public class SparkApplicationCustomResource {
 
             sparkCustomResource.setAdditionalProperties(Collections.singletonMap("spec", sparkCustomResourceSpec));
 
-            client.genericKubernetesResources(customResourceDefinitionContext).inNamespace("default").withName(sparkCustomResource.getMetadata().getName()).replace(sparkCustomResource);
+            client.genericKubernetesResources(customResourceDefinitionContext).inNamespace("default").resource(sparkCustomResource).replace();
             log("Edition of custom resource successful.");
 
         }

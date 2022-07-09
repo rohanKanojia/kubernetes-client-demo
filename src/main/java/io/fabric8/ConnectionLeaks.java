@@ -1,6 +1,6 @@
 package io.fabric8;
 
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.ExecWatch;
 
@@ -11,7 +11,7 @@ public class ConnectionLeaks {
     public static Logger logger = Logger.getLogger(ConnectionLeaks.class.getName());
 
     public static void main(String args[]) throws InterruptedException {
-        KubernetesClient client = new DefaultKubernetesClient();
+        KubernetesClient client = new KubernetesClientBuilder().build();
         testConnectionLeaksAfterExecutingCommandInNonExistingPodOnRealServer(client);
     }
 

@@ -4,24 +4,24 @@ import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.ContainerBuilder;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.dsl.base.PatchContext;
 import io.fabric8.kubernetes.client.dsl.base.PatchType;
 
-import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 
 public class PatchExamples {
     public static void main(String[] args) {
-        try (KubernetesClient kubernetesClient = new DefaultKubernetesClient()) {
+        try (KubernetesClient kubernetesClient = new KubernetesClientBuilder().build()) {
             Deployment deployment = createNewDeployment("patch-demo", 2);
 
             deployment = kubernetesClient.apps().deployments()
                     .inNamespace("default")
-                    .createOrReplace(deployment);
+                .resource(deployment)
+                    .createOrReplace();
 
             standardPatchTyped(kubernetesClient, deployment);
             patchStrategicMerge(kubernetesClient, deployment);
@@ -56,8 +56,8 @@ public class PatchExamples {
         // Patch to API Server
         kubernetesClient.apps().deployments()
                 .inNamespace(deployment.getMetadata().getNamespace())
-                .withName(deployment.getMetadata().getName())
-                .patch(deployment);
+                .resource(deployment)
+                .patch();
     }
 
     private static void patchJsonMerge(KubernetesClient kubernetesClient, Deployment deployment) {

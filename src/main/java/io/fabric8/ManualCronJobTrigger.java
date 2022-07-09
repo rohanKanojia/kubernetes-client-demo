@@ -3,12 +3,12 @@ package io.fabric8;
 import io.fabric8.kubernetes.api.model.batch.v1.CronJob;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobBuilder;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 
 public class ManualCronJobTrigger {
     public static void main(String[] args) {
-        try (KubernetesClient kubernetesClient = new DefaultKubernetesClient()) {
+        try (KubernetesClient kubernetesClient = new KubernetesClientBuilder().build()) {
             createManualJob(kubernetesClient, "default", "hello", "hello-rokumar");
         }
     }
@@ -30,6 +30,6 @@ public class ManualCronJobTrigger {
                 .withSpec(cronJob.getSpec().getJobTemplate().getSpec())
                 .build();
 
-        return kubernetesClient.batch().v1().jobs().inNamespace(namespace).create(newJobToCreate);
+        return kubernetesClient.batch().v1().jobs().inNamespace(namespace).resource(newJobToCreate).create();
     }
 }

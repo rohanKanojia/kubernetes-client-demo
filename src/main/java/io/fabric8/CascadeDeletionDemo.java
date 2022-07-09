@@ -1,6 +1,6 @@
 package io.fabric8;
 
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 
@@ -15,7 +15,7 @@ public class CascadeDeletionDemo {
 
         try {
             logger.log(Level.INFO, "Creating Kubernetes client");
-            KubernetesClient client = new DefaultKubernetesClient();
+            KubernetesClient client = new KubernetesClientBuilder().build();
             logger.log(Level.INFO, "Kubernetes client successfully created");
 
             // Run command kubectl run nginx --image=nginx --replicas=1

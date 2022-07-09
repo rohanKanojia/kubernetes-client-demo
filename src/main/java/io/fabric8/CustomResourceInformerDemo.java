@@ -1,8 +1,8 @@
 package io.fabric8;
 
 import io.fabric8.crd.CronTab;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer;
 import io.fabric8.kubernetes.client.informers.SharedInformerFactory;
@@ -17,7 +17,7 @@ public class CustomResourceInformerDemo {
   private static final Logger logger = LoggerFactory.getLogger(CustomResourceInformerDemo.class.getSimpleName());
 
   public static void main(String[] args) {
-    try (KubernetesClient client = new DefaultKubernetesClient()) {
+    try (KubernetesClient client = new KubernetesClientBuilder().build()) {
       SharedInformerFactory sharedInformerFactory = client.informers();
       SharedIndexInformer<CronTab> podInformer = sharedInformerFactory.sharedIndexInformerFor(
         CronTab.class,
@@ -48,7 +48,7 @@ public class CustomResourceInformerDemo {
 
       // Wait for 1 minute
       Thread.sleep(60 * 1000L);
-      sharedInformerFactory.stopAllRegisteredInformers(true);
+      sharedInformerFactory.stopAllRegisteredInformers();
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       logger.warn("interrupted ", e);
