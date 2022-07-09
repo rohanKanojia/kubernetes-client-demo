@@ -3,23 +3,20 @@ package io.fabric8;
 import io.fabric8.crd.CronTab;
 import io.fabric8.crd.CronTabList;
 import io.fabric8.crd.CronTabStatus;
-import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinition;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.MixedOperation;
 import io.fabric8.kubernetes.client.dsl.Resource;
-import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 public class CustomResourceStatusTest {
     private static final Logger logger = Logger.getLogger(CustomResourceStatusTest.class.getName());
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             MixedOperation<CronTab, CronTabList, Resource<CronTab>> cronTabClient = client
-                    .customResources(CronTab.class, CronTabList.class);
+                    .resources(CronTab.class, CronTabList.class);
 
             CronTab cronTab = cronTabClient.inNamespace("default").withName("my-new-cron-object").get();
 
@@ -29,17 +26,7 @@ public class CustomResourceStatusTest {
             newStatus.setLabelSelector("foobar");
             cronTab.setStatus(newStatus);
 
-            CustomResourceDefinitionContext crdContext = new CustomResourceDefinitionContext.Builder()
-                    .withGroup("stable.example.com")
-                    .withPlural("crontabs")
-                    .withVersion("v1")
-                    .withScope("Namespaced")
-                    .build();
-
-
-            client.customResource(crdContext).updateStatus("default", "my-new-cron-object", CustomResourceStatusTest.class.getResourceAsStream("/crontab-cr.json"));
-
-            CronTab updatedCronTab = cronTabClient.inNamespace("default").updateStatus(cronTab);
+            CronTab updatedCronTab = cronTabClient.inNamespace("default").replaceStatus(cronTab);
             log(updatedCronTab.getStatus().getLabelSelector());
         }
     }

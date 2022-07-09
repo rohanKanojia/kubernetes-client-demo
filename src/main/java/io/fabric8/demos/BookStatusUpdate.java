@@ -14,14 +14,14 @@ public class BookStatusUpdate {
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             // Create Book Client
-            bookClient = client.customResources(Book.class);
+            bookClient = client.resources(Book.class);
 
             // Get Book
             Book book = bookClient.inNamespace("default").withName("effective-java").get();
 
             // Update Book Status
             book.setStatus(createBookStatus(true, "Rohan Kumar"));
-            bookClient.inNamespace("default").withName("effective-java").updateStatus(book);
+            bookClient.inNamespace("default").withName("effective-java").replaceStatus(book);
         }
     }
 

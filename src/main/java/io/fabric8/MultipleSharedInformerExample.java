@@ -6,7 +6,6 @@ import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.informers.ResourceEventHandler;
 import io.fabric8.kubernetes.client.informers.SharedIndexInformer;
-import io.fabric8.kubernetes.client.informers.SharedInformerFactory;
 import io.fabric8.kubernetes.client.informers.cache.Lister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,26 +20,25 @@ public class MultipleSharedInformerExample {
 
     public static void main(String[] args) throws InterruptedException {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
-            SharedInformerFactory sharedInformerFactory = client.informers();
             Map<String, SharedIndexInformer<Pod>> namespaceToInformerMap = new HashMap<>();
             logger.info("Informer factory initialized.");
             for (int i = 10; i < 30; i++) {
-                SharedIndexInformer<Pod> informer = newPodSharedInformerClient(sharedInformerFactory, NAMESPACE_PREFIX + i);
+                SharedIndexInformer<Pod> informer = newPodSharedInformerClient(client, NAMESPACE_PREFIX + i);
                 namespaceToInformerMap.put(NAMESPACE_PREFIX + i, informer);
             }
             logger.info("Starting all registered informers");
-            sharedInformerFactory.startAllRegisteredInformers();
 
             for (Map.Entry<String, SharedIndexInformer<Pod>> entry: namespaceToInformerMap.entrySet()) {
                 listPodsFromEachInformerCache(entry.getKey(), entry.getValue());
             }
             TimeUnit.MINUTES.sleep(15);
-            sharedInformerFactory.stopAllRegisteredInformers();
+            namespaceToInformerMap.forEach((n, i) -> i.stop());
         }
     }
 
-    private static SharedIndexInformer<Pod> newPodSharedInformerClient(SharedInformerFactory sharedInformerFactory, String namespace) throws InterruptedException {
-        SharedIndexInformer<Pod> podInformer = sharedInformerFactory.inNamespace(namespace).sharedIndexInformerFor(Pod.class, 0L);
+    private static SharedIndexInformer<Pod> newPodSharedInformerClient(KubernetesClient client,
+        String namespace) {
+        SharedIndexInformer<Pod> podInformer = client.pods().inNamespace(namespace).inform();
         logger.info("Registered Pod SharedInformer for {} namespace", namespace);
         podInformer.addEventHandler(new PodEventHandler());
         return podInformer;

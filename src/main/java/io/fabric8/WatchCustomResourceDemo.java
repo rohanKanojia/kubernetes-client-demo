@@ -1,16 +1,15 @@
 package io.fabric8;
 
+import io.fabric8.kubernetes.api.model.GenericKubernetesResource;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
 import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -31,13 +30,11 @@ public class WatchCustomResourceDemo {
 
             // Watching custom resources now
             logger.info("Watching custom resources now");
-            client.customResource(crdContext).watch(namespace, new Watcher<String>() {
+            client.genericKubernetesResources(crdContext).inNamespace(namespace).watch(new Watcher<>() {
                 @Override
-                public void eventReceived(Action action, String resource) {
+                public void eventReceived(Action action, GenericKubernetesResource resource) {
                     try {
-                        JSONObject json = new JSONObject(resource);
-
-                        logger.info(action + " : " + json.getJSONObject("metadata").getString("name"));
+                        logger.info(action + " : " + resource.getMetadata().getName());
                     } catch (JSONException exception) {
                         logger.error("failed to parse object");
                     }
@@ -58,8 +55,6 @@ public class WatchCustomResourceDemo {
             closeLatch.await(10, TimeUnit.MINUTES);
         } catch (InterruptedException exception) {
             logger.info("Interrupted: " + exception.getMessage());
-        } catch (IOException exception) {
-            logger.info("Exception: " + exception.getMessage());
         }
     }
 }

@@ -15,7 +15,8 @@ public class CreateOrReplaceResourceList {
             KubernetesList kubernetesResourceList = new KubernetesListBuilder()
                     .build();
             kubernetesResourceList.setItems(resources);
-            client.resourceList(kubernetesResourceList).inNamespace("default").deletingExisting().createOrReplace();
+            client.resourceList(kubernetesResourceList).inNamespace("default").delete();
+            client.resourceList(kubernetesResourceList).inNamespace("default").createOrReplace();
         }
     }
 }

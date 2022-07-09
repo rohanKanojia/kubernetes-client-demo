@@ -1,11 +1,9 @@
 package io.fabric8;
 
+import io.fabric8.kubernetes.api.model.GenericKubernetesResource;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
-
-import java.io.IOException;
-import java.util.Map;
 
 public class CustomResourceCreateDemoTypeless {
     public static void main(String[] args) {
@@ -22,12 +20,11 @@ public class CustomResourceCreateDemoTypeless {
                     .build();
 
             // Load from Yaml
-            Map<String, Object> dummyObject = client.customResource(context)
-                    .load(CustomResourceCreateDemoTypeless.class.getResourceAsStream("/dummy-cr.yml"));
+            GenericKubernetesResource dummyObject = client.genericKubernetesResources(context)
+                .load(CustomResourceCreateDemoTypeless.class.getResourceAsStream("/dummy-cr.yml"))
+                .get();
             // Create Custom Resource
-            client.customResource(context).create("default", dummyObject);
-        } catch (IOException e) {
-            e.printStackTrace();
+            client.genericKubernetesResources(context).inNamespace("default").create(dummyObject);
         }
     }
 }

@@ -11,7 +11,7 @@ public class BookClientCreateDemo {
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             // Create Book Client
-            MixedOperation<Book, KubernetesResourceList<Book>, Resource<Book>> bookClient = client.customResources(Book.class);
+            MixedOperation<Book, KubernetesResourceList<Book>, Resource<Book>> bookClient = client.resources(Book.class);
 
             // List Books in a specified namespace
             String namespace = "default";

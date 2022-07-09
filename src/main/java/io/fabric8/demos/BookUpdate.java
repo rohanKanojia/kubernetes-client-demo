@@ -15,7 +15,7 @@ public class BookUpdate {
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             // Create Book Client
-            bookClient = client.customResources(Book.class);
+            bookClient = client.resources(Book.class);
 
             // Update Book with name effective-java
             bookClient.inNamespace("default").withName("effective-java").edit(b -> {

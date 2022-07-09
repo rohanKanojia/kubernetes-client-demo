@@ -8,7 +8,6 @@ import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.MixedOperation;
 import io.fabric8.kubernetes.client.dsl.Resource;
-import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
 
 public class CustomResourceCreateDemo {
     public static void main(String[] args) {
@@ -18,19 +17,7 @@ public class CustomResourceCreateDemo {
             Dummy dummy = getDummy();
 
             // Dummy Client
-            MixedOperation<Dummy, DummyList, Resource<Dummy>> dummyClient = null;
-            CustomResourceDefinitionContext context = new CustomResourceDefinitionContext
-                    .Builder()
-                    .withGroup("demo.fabric8.io")
-                    .withKind("Dummy")
-                    .withName("dummies.demo.fabric8.io")
-                    .withPlural("dummies")
-                    .withScope("Namespaced")
-                    .withVersion("v1")
-                    .build();
-
-            // Initializing Dummy Client
-            dummyClient = client.customResources(context, Dummy.class, DummyList.class);
+            MixedOperation<Dummy, DummyList, Resource<Dummy>> dummyClient = client.resources(Dummy.class, DummyList.class);
             // Using Dummy Client to create Dummy resource
             dummyClient.inNamespace("default").createOrReplace(dummy);
         }

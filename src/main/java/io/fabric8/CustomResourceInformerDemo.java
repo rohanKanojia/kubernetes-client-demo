@@ -19,28 +19,28 @@ public class CustomResourceInformerDemo {
   public static void main(String[] args) {
     try (KubernetesClient client = new DefaultKubernetesClient()) {
       SharedInformerFactory sharedInformerFactory = client.informers();
-      SharedIndexInformer<CronTab> podInformer = sharedInformerFactory.sharedIndexInformerForCustomResource(
+      SharedIndexInformer<CronTab> podInformer = sharedInformerFactory.sharedIndexInformerFor(
         CronTab.class,
         60 * 1000L);
       logger.info("Informer factory initialized.");
 
       podInformer.addEventHandler(
-        new ResourceEventHandler<CronTab>() {
-          @Override
-          public void onAdd(CronTab cronTab) {
-            logger.info("{}/{} crontab added", cronTab.getMetadata().getNamespace(), cronTab.getMetadata().getName());
-          }
+          new ResourceEventHandler<>() {
+            @Override
+            public void onAdd(CronTab cronTab) {
+              logger.info("{}/{} crontab added", cronTab.getMetadata().getNamespace(), cronTab.getMetadata().getName());
+            }
 
-          @Override
-          public void onUpdate(CronTab oldCronTab, CronTab newCronTab) {
-            logger.info("{}/{} crontab updated", oldCronTab.getMetadata().getNamespace(), oldCronTab.getMetadata().getName());
-          }
+            @Override
+            public void onUpdate(CronTab oldCronTab, CronTab newCronTab) {
+              logger.info("{}/{} crontab updated", oldCronTab.getMetadata().getNamespace(), oldCronTab.getMetadata().getName());
+            }
 
-          @Override
-          public void onDelete(CronTab cronTab, boolean deletedFinalStateUnknown) {
-            logger.info("{}/{} crontab deleted", cronTab.getMetadata().getNamespace(), cronTab.getMetadata().getName());
-          }
-        });
+            @Override
+            public void onDelete(CronTab cronTab, boolean deletedFinalStateUnknown) {
+              logger.info("{}/{} crontab deleted", cronTab.getMetadata().getNamespace(), cronTab.getMetadata().getName());
+            }
+          });
 
       logger.info("Starting all registered informers");
       Future<Void> startAllInformersFuture = sharedInformerFactory.startAllRegisteredInformers();

@@ -7,13 +7,12 @@ import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 public class CustomResourceDemo {
     private static final Logger logger = Logger.getLogger(CustomResourceDemo.class.getName());
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         Config config = new ConfigBuilder()
                 .withMasterUrl("https://192.168.99.100:8443")
@@ -30,7 +29,10 @@ public class CustomResourceDemo {
                     .withPlural("hellos")
                     .build();
 
-            client.customResource(myCrdContext).create("default", CustomResourceDemo.class.getResourceAsStream("/hello-cr.yml"));
+            client.genericKubernetesResources(myCrdContext)
+                .inNamespace("default")
+                .load(CustomResourceDemo.class.getResourceAsStream("/hello-cr.yml"))
+                .create();
             log("Successfully created Custom Resource");
         }
     }

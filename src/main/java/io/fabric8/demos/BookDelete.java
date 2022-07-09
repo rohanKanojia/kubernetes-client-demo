@@ -8,12 +8,11 @@ import io.fabric8.kubernetes.client.dsl.MixedOperation;
 import io.fabric8.kubernetes.client.dsl.Resource;
 
 public class BookDelete {
-    private static MixedOperation<Book, KubernetesResourceList<Book>, Resource<Book>> bookClient = null;
 
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             // Create Book Client
-            bookClient = client.customResources(Book.class);
+            MixedOperation<Book, KubernetesResourceList<Book>, Resource<Book>> bookClient = client.resources(Book.class);
 
             // Delete a CustomResource
             bookClient.inNamespace("default").withName("kubernetes-patterns").delete();

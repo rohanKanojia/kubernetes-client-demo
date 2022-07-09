@@ -13,7 +13,7 @@ public class BookLoadFromYaml {
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             // Create Book Client
-            bookClient = client.customResources(Book.class);
+            bookClient = client.resources(Book.class);
 
             // Load Book from YAML manifest
             Book book = bookClient.load(BookLoadFromYaml.class.getResourceAsStream("/book-cr.yaml")).get();

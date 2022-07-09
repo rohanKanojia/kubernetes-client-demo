@@ -1,6 +1,7 @@
 package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.ContainerBuilder;
+import io.fabric8.kubernetes.api.model.DeletionPropagation;
 import io.fabric8.kubernetes.api.model.LabelSelectorBuilder;
 import io.fabric8.kubernetes.api.model.PersistentVolumeClaimBuilder;
 import io.fabric8.kubernetes.api.model.PodTemplateSpec;
@@ -27,20 +28,20 @@ public class StatefulSetDelete {
         OkHttpClientImpl httpClientImpl = new OkHttpClientFactory().createHttpClient(config);
 
         final String statefulSetName = "test" + System.currentTimeMillis();
+        try (final DefaultKubernetesClient client = new DefaultKubernetesClient(httpClientImpl, config)) {
+            client.apps().statefulSets().create(createStatefulSet(statefulSetName));
 
-        final DefaultKubernetesClient client = new DefaultKubernetesClient(httpClientImpl, config);
-        client.apps().statefulSets().create(createStatefulSet(statefulSetName));
+            StatefulSet statefulSet = client.apps().statefulSets().withName(statefulSetName).waitUntilReady(5, TimeUnit.MINUTES);
 
-        StatefulSet statefulSet = client.apps().statefulSets().withName(statefulSetName).waitUntilReady(5, TimeUnit.MINUTES);
+            client.resource(statefulSet).withPropagationPolicy(DeletionPropagation.BACKGROUND).delete();
 
-        client.resource(statefulSet).cascading(true).delete();
-
-        final boolean exists = client.apps().statefulSets().withName(statefulSetName).get() != null;
-        if (exists) {
-            throw new Exception("Statefulset ought to have gone");
-        }
-        else {
-            System.out.println("Statefulset deleted successfully");
+            final boolean exists = client.apps().statefulSets().withName(statefulSetName).get() != null;
+            if (exists) {
+                throw new IllegalStateException("Statefulset ought to have gone");
+            }
+            else {
+                System.out.println("Statefulset deleted successfully");
+            }
         }
     }
 
@@ -63,7 +64,7 @@ public class StatefulSetDelete {
 
         final ResourceRequirements build = new ResourceRequirementsBuilder().withRequests(Collections.singletonMap(
                 "storage",
-                new QuantityBuilder().withNewAmount("1Mi").build())).build();
+                new QuantityBuilder().withAmount("1Mi").build())).build();
 
         return new StatefulSetBuilder()
                 .withNewMetadata().withName(statefulSetName)

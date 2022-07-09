@@ -19,15 +19,18 @@ public class ConfigMapDemo {
 
 	public static void main(String args[]) throws InterruptedException {
 		String namespace = "default";
-		try {
-			final KubernetesClient client = new DefaultKubernetesClient();
-			ConfigMap configMap1 = new ConfigMapBuilder().withNewMetadata()
-					.withName("configmap1").endMetadata().addToData("one", "1")
-					.addToData("two", "2").addToData("three", "3").build();
+		try (final KubernetesClient client = new DefaultKubernetesClient()) {
+			ConfigMap configMap1 = new ConfigMapBuilder()
+					.withNewMetadata()
+					  .withName("configmap1")
+					.endMetadata()
+					.addToData("one", "1")
+					.addToData("two", "2")
+					.addToData("three", "3")
+					.build();
 
-			Thread.sleep(10 * 1000);
 			logger.log(Level.INFO, "Creating config map");
-			client.configMaps().inNamespace(namespace).create(configMap1);
+			client.configMaps().inNamespace(namespace).createOrReplace(configMap1);
 			logger.log(Level.INFO, "OK .. ConfigMap successfully created");
 
 			/*
@@ -42,7 +45,6 @@ public class ConfigMapDemo {
 					});
 			
 			logger.log(Level.INFO, "Closing client");
-			client.close();
 		} catch (KubernetesClientException aException) {
 			logger.log(Level.SEVERE,
 					"Some problem occured related to K8 client");

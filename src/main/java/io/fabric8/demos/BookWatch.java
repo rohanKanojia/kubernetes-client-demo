@@ -18,7 +18,7 @@ public class BookWatch {
     public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             // Create Book Client
-            bookClient = client.customResources(Book.class);
+            bookClient = client.resources(Book.class);
 
             // Update Book with name effective-java
             final CountDownLatch countDownLatch = new CountDownLatch(1);

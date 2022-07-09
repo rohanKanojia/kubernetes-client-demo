@@ -5,11 +5,8 @@ import io.fabric8.kubernetes.api.model.ConfigMapBuilder;
 import io.fabric8.kubernetes.api.model.IntOrString;
 import io.fabric8.kubernetes.api.model.KubernetesList;
 import io.fabric8.kubernetes.api.model.KubernetesListBuilder;
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.api.model.PodBuilder;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceBuilder;
-import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import org.slf4j.Logger;
@@ -18,9 +15,9 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 
 public class CreateOrReplaceDemo {
-    private static Logger logger = LoggerFactory.getLogger(CreateOrReplaceDemo.class);
+    private static final Logger logger = LoggerFactory.getLogger(CreateOrReplaceDemo.class);
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try (KubernetesClient client = new DefaultKubernetesClient()) {
             String namespace = "default";
 
@@ -56,7 +53,7 @@ public class CreateOrReplaceDemo {
             client.resourceList(list).inNamespace(namespace).createOrReplace();
 
             logger.info("5. Deleting existing resources...");
-            client.resourceList(list).inNamespace(namespace).deletingExisting();
+            client.resourceList(list).inNamespace(namespace).delete();
         }
     }
 }

@@ -1,17 +1,17 @@
 package io.fabric8;
 
+import io.fabric8.kubernetes.api.model.GenericKubernetesResource;
+import io.fabric8.kubernetes.api.model.GenericKubernetesResourceBuilder;
+import io.fabric8.kubernetes.api.model.GenericKubernetesResourceList;
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinition;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
 import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.Map;
+import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -20,7 +20,7 @@ public class RawCustomResourcesDemoBlog {
     private static final Logger logger = Logger.getLogger(RawCustomResourcesDemoBlog.class.getName());
     private static final CountDownLatch closeLatch = new CountDownLatch(1);
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
 
         try (final KubernetesClient client = new DefaultKubernetesClient()) {
             String namespace = "default";
@@ -40,17 +40,18 @@ public class RawCustomResourcesDemoBlog {
                     .build();
 
             // Creating from HashMap
-            Map<String, Object> cr1 = client
-                    .customResource(animalCrdContext)
-                    .load(RawCustomResourcesDemoBlog.class.getResourceAsStream("/seal-cr.yml"));
-            client.customResource(animalCrdContext).create(namespace, cr1);
+            GenericKubernetesResource cr1 = client
+                    .genericKubernetesResources(animalCrdContext)
+                    .load(RawCustomResourcesDemoBlog.class.getResourceAsStream("/seal-cr.yml"))
+                    .get();
+            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).create(cr1);
 
-            // Creating from JSON String
-            JSONObject cr2Json = new JSONObject(cr1);
-            cr2Json.getJSONObject("metadata").put("name", "bison");
-            cr2Json.getJSONObject("spec").put("image", "strong-bison-image");
+            GenericKubernetesResource cr2 = new GenericKubernetesResourceBuilder()
+                .withNewMetadata().withName("bison").endMetadata()
+                .withAdditionalProperties(Collections.singletonMap("spec", Collections.singletonMap("image", "strong-bison-image")))
+                .build();
 
-            client.customResource(animalCrdContext).create(namespace, cr2Json.toString());
+            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).create(cr2);
 
             // Creating from Raw JSON String
             String crBasicString = "{" +
@@ -64,43 +65,41 @@ public class RawCustomResourcesDemoBlog {
                     "    \"image\": \"my-silly-mongoose-image\"" +
                     "  }" +
                     "}";
-            client.customResource(animalCrdContext).create(namespace, crBasicString);
+            GenericKubernetesResource cr3 = client.genericKubernetesResources(animalCrdContext)
+                .load(crBasicString)
+                .get();
+            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).create(cr3);
 
 
             // Listing Custom resources in a specific namespace
-            JSONObject animalListJSON = new JSONObject(client
-                    .customResource(animalCrdContext)
-                    .list(namespace));
+            GenericKubernetesResourceList animalList = client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).list();
 
-            JSONArray animalItems = animalListJSON.getJSONArray("items");
-            for (int index = 0; index < animalItems.length(); index++) {
-                JSONObject currentItem = animalItems.getJSONObject(index);
-                log(currentItem.getJSONObject("metadata").getString("name"));
+            for (int index = 0; index < animalList.getItems().size(); index++) {
+                GenericKubernetesResource currentItem = animalList.getItems().get(index);
+                log(currentItem.getMetadata().getName());
             }
 
             // Updating a specific custom resource
-            JSONObject oldAnimal = new JSONObject(client
-                    .customResource(animalCrdContext)
-                    .get(namespace, "mongoose"));
-            oldAnimal.getJSONObject("spec")
-                    .put("image", "my-silly-mongoose-image:v2");
-            oldAnimal.getJSONObject("metadata")
-                    .put("labels", new JSONObject("{\"updated\":\"true\"}"));
+            GenericKubernetesResource oldAnimal = client
+                .genericKubernetesResources(animalCrdContext)
+                .inNamespace(namespace)
+                .withName("mongoose")
+                .get();
+            oldAnimal.setAdditionalProperties(Collections.singletonMap("spec", Collections.singletonMap("image", "my-silly-mongoose-image:v2")));
+            oldAnimal.getMetadata().setLabels(Collections.singletonMap("updated", "true"));
 
-            client.customResource(animalCrdContext).edit(namespace, "mongoose", oldAnimal.toString());
+            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).withName("mongoose").replace(oldAnimal);
 
             // Deleting a custom resource
-            client.customResource(animalCrdContext).delete(namespace, "seal");
+            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).withName("seal").delete();
 
             // Watching a custom resource
             logger.info("Watching custom resources now, open for 10 minutes...");
-            client.customResource(animalCrdContext).watch(namespace, new Watcher<String>() {
+            client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).watch(new Watcher<GenericKubernetesResource>() {
                 @Override
-                public void eventReceived(Action action, String resource) {
+                public void eventReceived(Action action, GenericKubernetesResource resource) {
                     try {
-                        JSONObject json = new JSONObject(resource);
-
-                        log(action + " : " + json.getJSONObject("metadata").getString("name"));
+                        log(action + " : " + resource.getMetadata().getName());
                     } catch (JSONException exception) {
                         log("failed to parse object");
                     }

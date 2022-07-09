@@ -1,12 +1,11 @@
 package io.fabric8;
 
+import io.fabric8.kubernetes.api.model.GenericKubernetesResource;
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinition;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.base.CustomResourceDefinitionContext;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +14,7 @@ import java.util.logging.Logger;
 public class SparkApplicationCustomResource {
     private static final Logger logger = Logger.getLogger(SparkApplicationCustomResource.class.getName());
 
-    public static void main(String[] args) throws IOException {
-
+    public static void main(String[] args) {
         try (final KubernetesClient client = new DefaultKubernetesClient()) {
             CustomResourceDefinition sparkCrd = client.apiextensions().v1beta1().customResourceDefinitions()
                     .load(SparkApplicationCustomResource.class.getResourceAsStream("/sparkapplication-crd.yml"))
@@ -33,23 +31,22 @@ public class SparkApplicationCustomResource {
                     .build();
 
             // Create Spark Application Custom Resource
-            Map<String, Object> sparkCustomResource = client.customResource(customResourceDefinitionContext)
-                    .create("default", SparkApplicationCustomResource.class.getResourceAsStream("/sparkapplication-cr.yml"));
-            System.out.println(sparkCustomResource.toString());
+            GenericKubernetesResource sparkCustomResource = client.genericKubernetesResources(customResourceDefinitionContext)
+                .load(SparkApplicationCustomResource.class.getResourceAsStream("/sparkapplication-cr.yml"))
+                .create();
 
-            String customResourceName = ((Map<String, Object> )sparkCustomResource.get("metadata")).get("name").toString();
-            log("Custom resource " + customResourceName + " created");
+            log("Custom resource " + sparkCustomResource.getMetadata().getName() + " created");
 
             // Add volume
             Map<String, Object> configMapVolume = new HashMap<>();
             configMapVolume.put("name", "app-config");
             configMapVolume.put("configMap", Collections.singletonMap("name", "app-conf"));
-            Map<String, Object> sparkCustomResourceSpec = (Map<String, Object>)sparkCustomResource.get("spec");
+            Map<String, Object> sparkCustomResourceSpec = sparkCustomResource.get("spec");
             sparkCustomResourceSpec.put("volumes", Collections.singletonList(configMapVolume));
 
-            sparkCustomResource.put("spec", sparkCustomResourceSpec);
+            sparkCustomResource.setAdditionalProperties(Collections.singletonMap("spec", sparkCustomResourceSpec));
 
-            client.customResource(customResourceDefinitionContext).edit("default", customResourceName, sparkCustomResource);
+            client.genericKubernetesResources(customResourceDefinitionContext).inNamespace("default").withName(sparkCustomResource.getMetadata().getName()).replace(sparkCustomResource);
             log("Edition of custom resource successful.");
 
         }
