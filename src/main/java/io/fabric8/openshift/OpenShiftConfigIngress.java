@@ -1,6 +1,6 @@
 package io.fabric8.openshift;
 
-import io.fabric8.openshift.api.model.Ingress;
+import io.fabric8.openshift.api.model.config.v1.Ingress;
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.openshift.client.OpenShiftClient;
 

@@ -1,7 +1,7 @@
 package io.fabric8.openshift;
 
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;
-import io.fabric8.openshift.api.model.APIServerList;
+import io.fabric8.openshift.api.model.config.v1.APIServerList;
 import io.fabric8.openshift.client.OpenShiftClient;
 
 public class ProxyDemo {
