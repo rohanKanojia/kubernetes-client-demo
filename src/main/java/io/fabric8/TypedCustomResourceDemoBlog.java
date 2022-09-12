@@ -1,7 +1,7 @@
 package io.fabric8;
 
 import io.fabric8.crd.CronTab;
-import io.fabric8.crd.CronTabList;
+import io.fabric8.kubernetes.api.model.KubernetesResourceList;
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watcher;
@@ -12,7 +12,7 @@ import io.fabric8.kubernetes.client.dsl.Resource;
 public class TypedCustomResourceDemoBlog {
     public static void main(String[] args) throws InterruptedException {
         try (KubernetesClient client = new KubernetesClientBuilder().build()) {
-            MixedOperation<CronTab, CronTabList, Resource<CronTab>> cronTabClient = client.resources(CronTab.class, CronTabList.class);
+            MixedOperation<CronTab, KubernetesResourceList<CronTab>, Resource<CronTab>> cronTabClient = client.resources(CronTab.class);
 
             // Load CronTab CustomResource from file
             CronTab cronTab1 = cronTabClient.load(TypedCustomResourceDemoBlog.class.getResourceAsStream("/crontab.yml")).get();
@@ -27,7 +27,7 @@ public class TypedCustomResourceDemoBlog {
             log(cronTab1.getMetadata().getName() + " created.");
 
             // List resource from API Server
-            CronTabList cronTabList = cronTabClient.inNamespace("default").list();
+            KubernetesResourceList<CronTab> cronTabList = cronTabClient.inNamespace("default").list();
             log(cronTabList.getItems().size() + " CronTabs found in cluster");
 
             // Update resource

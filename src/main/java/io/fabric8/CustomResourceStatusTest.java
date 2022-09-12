@@ -1,8 +1,8 @@
 package io.fabric8;
 
 import io.fabric8.crd.CronTab;
-import io.fabric8.crd.CronTabList;
 import io.fabric8.crd.CronTabStatus;
+import io.fabric8.kubernetes.api.model.KubernetesResourceList;
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.MixedOperation;
@@ -15,8 +15,8 @@ public class CustomResourceStatusTest {
 
     public static void main(String[] args) {
         try (KubernetesClient client = new KubernetesClientBuilder().build()) {
-            MixedOperation<CronTab, CronTabList, Resource<CronTab>> cronTabClient = client
-                    .resources(CronTab.class, CronTabList.class);
+            MixedOperation<CronTab, KubernetesResourceList<CronTab>, Resource<CronTab>> cronTabClient = client
+                    .resources(CronTab.class);
 
             CronTab cronTab = cronTabClient.inNamespace("default").withName("my-new-cron-object").get();
 

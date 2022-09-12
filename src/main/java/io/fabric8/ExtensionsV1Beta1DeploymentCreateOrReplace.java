@@ -7,6 +7,7 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 
 import java.util.Collections;
 
+@SuppressWarnings("deprecation")
 public class ExtensionsV1Beta1DeploymentCreateOrReplace {
     public static void main(String[] args) {
         try (KubernetesClient client = new KubernetesClientBuilder().build()) {
