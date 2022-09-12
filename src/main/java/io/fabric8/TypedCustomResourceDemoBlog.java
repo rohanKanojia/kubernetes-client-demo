@@ -4,10 +4,13 @@ import io.fabric8.crd.CronTab;
 import io.fabric8.kubernetes.api.model.KubernetesResourceList;
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.Watch;
 import io.fabric8.kubernetes.client.Watcher;
 import io.fabric8.kubernetes.client.WatcherException;
 import io.fabric8.kubernetes.client.dsl.MixedOperation;
 import io.fabric8.kubernetes.client.dsl.Resource;
+import io.fabric8.kubernetes.client.dsl.base.PatchContext;
+import io.fabric8.kubernetes.client.dsl.base.PatchType;
 
 public class TypedCustomResourceDemoBlog {
     public static void main(String[] args) throws InterruptedException {
@@ -31,8 +34,9 @@ public class TypedCustomResourceDemoBlog {
             log(cronTabList.getItems().size() + " CronTabs found in cluster");
 
             // Update resource
-            cronTab1.getSpec().setReplicas(5);
-            cronTabClient.inNamespace("default").resource(cronTab1).patch();
+            cronTabClient.inNamespace("default").resource(cronTab1).patch(
+                PatchContext.of(PatchType.JSON_MERGE),
+                "{\"spec\":{\"replicas\":5}}");
             log("CronTab " + cronTab1.getMetadata().getName() + " updated.");
 
             // Delete CronTab
@@ -40,8 +44,7 @@ public class TypedCustomResourceDemoBlog {
             cronTabClient.inNamespace("default").withName("my-second-cron-object").delete();
             log("CronTabs successfully deleted");
 
-
-            cronTabClient.inNamespace("default").watch(new Watcher<>() {
+            Watch watch = cronTabClient.inNamespace("default").watch(new Watcher<>() {
                 @Override
                 public void eventReceived(Action action, CronTab cronTab) {
                     log(action.toString() + " " + cronTab.getMetadata().getName());
@@ -49,17 +52,19 @@ public class TypedCustomResourceDemoBlog {
 
                 @Override
                 public void onClose() {
+                    log("watch closed");
                 }
 
                 @Override
                 public void onClose(WatcherException e) {
-                    log("watch closed...");
+                    log("watch closed due to exception : " + e.getMessage());
                 }
 
             });
 
             log("Watch open for 60 seconds...");
             Thread.sleep(60 * 1000L);
+            watch.close();
         }
     }
 
