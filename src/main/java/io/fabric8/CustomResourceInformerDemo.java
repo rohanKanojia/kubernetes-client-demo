@@ -19,12 +19,12 @@ public class CustomResourceInformerDemo {
   public static void main(String[] args) {
     try (KubernetesClient client = new KubernetesClientBuilder().build()) {
       SharedInformerFactory sharedInformerFactory = client.informers();
-      SharedIndexInformer<CronTab> podInformer = sharedInformerFactory.sharedIndexInformerFor(
-        CronTab.class,
-        60 * 1000L);
+      SharedIndexInformer<CronTab> cronTabInformer = sharedInformerFactory.sharedIndexInformerFor(
+          CronTab.class,
+          60 * 1000L);
       logger.info("Informer factory initialized.");
 
-      podInformer.addEventHandler(
+      cronTabInformer.addEventHandler(
           new ResourceEventHandler<>() {
             @Override
             public void onAdd(CronTab cronTab) {
@@ -55,5 +55,5 @@ public class CustomResourceInformerDemo {
     } catch (ExecutionException executionException) {
       logger.error("Error in starting all informers", executionException);
     }
-}
+  }
 }

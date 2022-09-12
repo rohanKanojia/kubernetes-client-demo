@@ -14,7 +14,6 @@ public class NamespacedInformerDemo {
 
     public static void main(String[] args) {
         try (KubernetesClient client = new KubernetesClientBuilder().build()) {
-
             logger.info("Creating SharedIndexInformer for default namespace");
             SharedIndexInformer<Pod> podInformer = client.pods().inNamespace("default").inform(new ResourceEventHandler<Pod>() {
                 @Override
@@ -36,7 +35,7 @@ public class NamespacedInformerDemo {
             // Wait for 1 minute
             Thread.sleep(60 * 1000L);
             logger.info("Stopping Pod SharedIndexInformer");
-            podInformer.stop();
+            podInformer.close();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             logger.info("Interrupted ", e);
