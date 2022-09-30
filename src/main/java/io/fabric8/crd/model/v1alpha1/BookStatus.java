@@ -1,4 +1,4 @@
-package io.fabric8.crd;
+package io.fabric8.crd.model.v1alpha1;
 
 public class BookStatus {
     private boolean issued;
@@ -20,9 +20,9 @@ public class BookStatus {
         this.issuedto = issuedto;
     }
 
-    @Override
-    public String toString() {
-        return "BookStatus{issued=" + issued + "," +
-                "issuedto=" + issuedto + "}";
-    }
+//    @Override
+//    public String toString() {
+//        return "BookStatus{issued=" + issued + "," +
+//                "issuedto=" + issuedto + "}";
+//    }
 }

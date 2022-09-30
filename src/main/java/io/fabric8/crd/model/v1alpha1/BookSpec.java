@@ -1,4 +1,4 @@
-package io.fabric8.crd;
+package io.fabric8.crd.model.v1alpha1;
 
 public class BookSpec {
     private String title;
@@ -28,11 +28,11 @@ public class BookSpec {
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
-
-    @Override
-    public String toString() {
-        return "BookSpec{title=" + title + "," +
-                "author=" + author + "," +
-                "isbn=" + isbn + "}";
-    }
+//
+//    @Override
+//    public String toString() {
+//        return "BookSpec{title=" + title + "," +
+//                "author=" + author + "," +
+//                "isbn=" + isbn + "}";
+//    }
 }

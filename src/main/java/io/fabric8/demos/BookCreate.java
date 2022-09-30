@@ -1,7 +1,7 @@
 package io.fabric8.demos;
 
-import io.fabric8.crd.Book;
-import io.fabric8.crd.BookSpec;
+import io.fabric8.crd.model.v1alpha1.Book;
+import io.fabric8.crd.model.v1alpha1.BookSpec;
 import io.fabric8.kubernetes.api.model.KubernetesResourceList;
 import io.fabric8.kubernetes.api.model.ObjectMetaBuilder;
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;

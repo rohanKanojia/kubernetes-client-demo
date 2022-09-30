@@ -1,4 +1,4 @@
-package io.fabric8.crd;
+package io.fabric8.crd.mode.v1;
 
 import io.fabric8.kubernetes.api.model.KubernetesResource;
 

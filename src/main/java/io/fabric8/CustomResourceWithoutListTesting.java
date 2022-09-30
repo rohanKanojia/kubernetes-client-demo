@@ -1,6 +1,6 @@
 package io.fabric8;
 
-import io.fabric8.crd.CronTab;
+import io.fabric8.crd.mode.v1.CronTab;
 import io.fabric8.kubernetes.api.model.KubernetesResourceList;
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;

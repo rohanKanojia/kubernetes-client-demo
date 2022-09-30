@@ -1,7 +1,7 @@
 package io.fabric8;
 
-import io.fabric8.crd.Dummy;
-import io.fabric8.crd.DummySpec;
+import io.fabric8.crd.mode.v1.Dummy;
+import io.fabric8.crd.mode.v1.DummySpec;
 import io.fabric8.kubernetes.api.model.KubernetesResourceList;
 import io.fabric8.kubernetes.api.model.ObjectMetaBuilder;
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;
