@@ -3,9 +3,6 @@ package io.fabric8;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;
-import io.fabric8.kubernetes.client.dsl.base.PatchContext;
-import io.fabric8.kubernetes.client.dsl.base.PatchType;
-
 import java.util.Collections;
 
 public class ServerSideApplyDemo {
@@ -15,7 +12,7 @@ public class ServerSideApplyDemo {
           .load(ServerSideApplyDemo.class.getResourceAsStream("/test-svc.yaml"))
           .get();
 
-      client.services()
+      svc = client.services()
           .inNamespace("default")
           .resource(svc)
           .create();
@@ -24,8 +21,8 @@ public class ServerSideApplyDemo {
 
       client.services()
           .inNamespace("default")
-          .withName("my-service")
-          .patch(PatchContext.of(PatchType.SERVER_SIDE_APPLY), svc);
+          .resource(svc)
+          .serverSideApply();
     }
   }
 }
