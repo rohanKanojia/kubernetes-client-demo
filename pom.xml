@@ -2,6 +2,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>io.fabric8</groupId>
+        <artifactId>kubernetes-client-demo-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>parent/pom.xml</relativePath>
+    </parent>
+
     <groupId>io.fabric8</groupId>
     <artifactId>kubernetes-client-demo</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -11,12 +18,9 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <version.fabric8.client>6.3.1</version.fabric8.client>
+        <version.fabric8.client>${fabric8.version}</version.fabric8.client>
         <commons-codec.version>1.15</commons-codec.version>
         <commons-compress.version>1.21</commons-compress.version>
-        <exec-maven-plugin.version>1.4.0</exec-maven-plugin.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <slf4j-simple.version>1.7.28</slf4j-simple.version>
         <json.version>20190722</json.version>
@@ -77,31 +81,5 @@
             <version>${slf4j-api.version}</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>${exec-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <release>11</release>
-                    <showDeprecation>true</showDeprecation>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
