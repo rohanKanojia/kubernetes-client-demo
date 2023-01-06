@@ -18,6 +18,10 @@ You can load project as maven project in your IDE and can run sample from IDE. Y
 mvn exec:java -Dexec.mainClass="io.fabric8.DeploymentDemo"
 ```
 
+### Fabric8 Code Generation samples
+- [CRD YAML -> Java POJO](./fabric8-crd-java-generator-demo/README.md)
+- [Java POJO -> CRD YAML](./fabric8-java-crd-yaml-generator-demo/README.md)
+
 ### `kubectl` to Kubernetes Client Mapping:
 | kubectl                                        | Fabric8 Kubernetes Client                           |
 | ---------------------------------------------- | ------------------------------------- |
