@@ -22,6 +22,8 @@ mvn exec:java -Dexec.mainClass="io.fabric8.DeploymentDemo"
 - [CRD YAML -> Java POJO](./fabric8-crd-java-generator-demo/README.md)
 - [Java POJO -> CRD YAML](./fabric8-java-crd-yaml-generator-demo/README.md)
 
+### [Writing Tests Using Fabric8 Kubernetes Client](./writing-tests-with-fabric8/README.md)
+
 ### `kubectl` to Kubernetes Client Mapping:
 | kubectl                                        | Fabric8 Kubernetes Client                           |
 | ---------------------------------------------- | ------------------------------------- |

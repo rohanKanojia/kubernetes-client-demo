@@ -10,7 +10,8 @@
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>fabric8-java-crd-yaml-generator-demo</artifactId>
+    <artifactId>writing-tests-with-fabric8</artifactId>
+
 
     <dependencies>
         <dependency>
@@ -20,8 +21,15 @@
         </dependency>
         <dependency>
             <groupId>io.fabric8</groupId>
-            <artifactId>crd-generator-apt</artifactId>
+            <artifactId>kubernetes-server-mock</artifactId>
             <version>${fabric8.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>kubernetes-junit-jupiter</artifactId>
+            <version>${fabric8.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -43,5 +51,20 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>k8s-e2e</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${maven-failsafe-plugin.version}</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
