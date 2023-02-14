@@ -1,7 +1,5 @@
 package io.fabric8;
 
-import java.io.FileInputStream;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,8 +18,6 @@ public class PodDemo {
 
   public static void main(String[] args) {
 		String namespace = "default";
-		String redisYamlFile = System.getProperty("user.dir") + "/src/main/resources/test-redis.yml";
-
 		try {
 			final KubernetesClient client = new KubernetesClientBuilder().build();
 
@@ -41,8 +37,7 @@ public class PodDemo {
 			/*
 			 * Creating pod from yaml file
 			 */
-			logger.log(Level.INFO, redisYamlFile);
-			Pod pod2 = client.pods().inNamespace(namespace).load(new FileInputStream(redisYamlFile)).get();
+			Pod pod2 = client.pods().inNamespace(namespace).load(PodDemo.class.getResourceAsStream("/test-redis.yml")).get();
 			client.pods().inNamespace(namespace).resource(pod2).create();
 			logger.log(Level.INFO, "created " + pod2.getMetadata().getName());
 

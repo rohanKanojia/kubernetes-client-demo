@@ -10,12 +10,12 @@ public class ChangeServiceType {
             Service svc = client.services().load(ChangeServiceType.class.getResourceAsStream("/test-svc.yaml")).get();
 
             // Create
-            client.services().inNamespace("default").resource(svc).createOrReplace();
+            client.services().inNamespace("default").resource(svc).create();
 
             svc.getSpec().setType("ExternalName");
             svc.getSpec().setExternalName("my.database.example.com");
             svc.getSpec().setClusterIP("");
-            svc = client.services().inNamespace("default").resource(svc).createOrReplace();
+            svc = client.services().inNamespace("default").resource(svc).replace();
 
         }
     }

@@ -16,12 +16,11 @@ public class RollingUpdateDemo {
 
 	public static void main(String[] args) {
 		String namespace = "default";
-		String redisYamlFile = System.getProperty("user.dir")
-				+ "/src/main/resources/postgres-deployment.yml";
+		String redisYamlFile = "/postgres-deployment.yml";
 		try (KubernetesClient client = new KubernetesClientBuilder().build()) {
 			Deployment aDeployment = client.apps().deployments()
 					.inNamespace(namespace)
-					.load(new FileInputStream(redisYamlFile)).get();
+					.load(RollingUpdateDemo.class.getResourceAsStream(redisYamlFile)).get();
 
 			client.apps().deployments().inNamespace(namespace)
 					.resource(aDeployment)

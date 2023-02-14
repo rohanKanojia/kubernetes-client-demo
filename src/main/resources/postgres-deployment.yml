@@ -8,6 +8,10 @@ metadata:
   ownerReferences: []
 spec:
   replicas: 2
+  selector:
+    matchLabels:
+      app: "database"
+      dbtype: "postgres"
   template:
     metadata:
       annotations: {}

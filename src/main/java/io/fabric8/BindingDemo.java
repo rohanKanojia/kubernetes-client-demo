@@ -13,7 +13,6 @@ public class BindingDemo {
                     .withNewTarget().withKind("Node").withApiVersion("v1").withName("minikube").endTarget()
                     .build();
 
-            //kubernetesClient.bindings().inNamespace("default").create(binding);
             kubernetesClient.resource(binding).inNamespace("default").createOrReplace();
         }
     }
