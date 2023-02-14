@@ -4,10 +4,8 @@ import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.ExecListener;
 import io.fabric8.kubernetes.client.dsl.ExecWatch;
-import okhttp3.Response;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -37,7 +35,7 @@ public class ExecDemoSaveOutput {
 
             execLatch.await(5, TimeUnit.SECONDS);
             execWatch.close();
-            System.out.println(out.toString());
+            System.out.println(out);
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
             ie.printStackTrace();

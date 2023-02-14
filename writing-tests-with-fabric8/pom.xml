@@ -17,18 +17,15 @@
         <dependency>
             <groupId>io.fabric8</groupId>
             <artifactId>kubernetes-client</artifactId>
-            <version>${fabric8.version}</version>
         </dependency>
         <dependency>
             <groupId>io.fabric8</groupId>
             <artifactId>kubernetes-server-mock</artifactId>
-            <version>${fabric8.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.fabric8</groupId>
             <artifactId>kubernetes-junit-jupiter</artifactId>
-            <version>${fabric8.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
