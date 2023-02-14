@@ -16,7 +16,7 @@ public class BookLoadFromYaml {
             bookClient = client.resources(Book.class);
 
             // Load Book from YAML manifest
-            Book book = bookClient.load(BookLoadFromYaml.class.getResourceAsStream("/book-cr.yaml")).get();
+            Book book = bookClient.load(BookLoadFromYaml.class.getResourceAsStream("/book-cr.yaml")).item();
         }
     }
 }

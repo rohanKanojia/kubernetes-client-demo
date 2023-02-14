@@ -18,7 +18,7 @@ public class CustomResourceDemo {
                 .withMasterUrl("https://192.168.99.100:8443")
                 .build();
         try (final KubernetesClient client = new KubernetesClientBuilder().withConfig(config).build()) {
-            CustomResourceDefinition crd = client.apiextensions().v1beta1().customResourceDefinitions().load(CustomResourceDemo.class.getResourceAsStream("/hello-crd.yml")).get();
+            CustomResourceDefinition crd = client.apiextensions().v1beta1().customResourceDefinitions().load(CustomResourceDemo.class.getResourceAsStream("/hello-crd.yml")).item();
             client.apiextensions().v1beta1().customResourceDefinitions().resource(crd).create();
             log("Created Custom Resource Definition");
 

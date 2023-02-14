@@ -18,8 +18,8 @@ public class TypedCustomResourceDemoBlog {
             MixedOperation<CronTab, KubernetesResourceList<CronTab>, Resource<CronTab>> cronTabClient = client.resources(CronTab.class);
 
             // Load CronTab CustomResource from file
-            CronTab cronTab1 = cronTabClient.load(TypedCustomResourceDemoBlog.class.getResourceAsStream("/crontab.yml")).get();
-            CronTab cronTab2 = cronTabClient.load(TypedCustomResourceDemoBlog.class.getResourceAsStream("/crontab2.yml")).get();
+            CronTab cronTab1 = cronTabClient.load(TypedCustomResourceDemoBlog.class.getResourceAsStream("/crontab.yml")).item();
+            CronTab cronTab2 = cronTabClient.load(TypedCustomResourceDemoBlog.class.getResourceAsStream("/crontab2.yml")).item();
 
             // Create CronTab
             cronTabClient.inNamespace("default").resource(cronTab1).create();

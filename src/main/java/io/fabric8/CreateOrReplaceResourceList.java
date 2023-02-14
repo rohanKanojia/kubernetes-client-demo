@@ -11,7 +11,7 @@ import java.util.List;
 public class CreateOrReplaceResourceList {
     public static void main(String[] args) {
         try (KubernetesClient client = new KubernetesClientBuilder().build()) {
-            List<HasMetadata> resources = client.load(CreateOrReplaceResourceList.class.getResourceAsStream("/test-list.yml")).get();
+            List<HasMetadata> resources = client.load(CreateOrReplaceResourceList.class.getResourceAsStream("/test-list.yml")).items();
             KubernetesList kubernetesResourceList = new KubernetesListBuilder()
                     .build();
             kubernetesResourceList.setItems(resources);

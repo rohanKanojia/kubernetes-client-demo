@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 public class ConnectionLeaks {
     public static Logger logger = Logger.getLogger(ConnectionLeaks.class.getName());
 
-    public static void main(String args[]) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         KubernetesClient client = new KubernetesClientBuilder().build();
         testConnectionLeaksAfterExecutingCommandInNonExistingPodOnRealServer(client);
     }

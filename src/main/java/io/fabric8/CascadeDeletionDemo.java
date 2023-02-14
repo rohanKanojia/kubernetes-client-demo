@@ -11,7 +11,7 @@ public class CascadeDeletionDemo {
     private static final Logger logger = Logger.getLogger(CascadeDeletionDemo.class
             .getName());
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 
         try {
             logger.log(Level.INFO, "Creating Kubernetes client");

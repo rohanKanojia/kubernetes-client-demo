@@ -37,7 +37,7 @@ public class CreateOrReplaceDemo {
 
             logger.info("1. Creating list...");
             KubernetesList list = new KubernetesListBuilder()
-                    .withItems(client.apps().deployments().load(CreateOrReplaceDemo.class.getResourceAsStream("/nginx-deployment.yml")).get()
+                    .withItems(client.apps().deployments().load(CreateOrReplaceDemo.class.getResourceAsStream("/nginx-deployment.yml")).item()
                     , service, configMap)
                     .build();
 

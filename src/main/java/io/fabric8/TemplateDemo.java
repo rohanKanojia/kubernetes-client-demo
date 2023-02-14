@@ -29,7 +29,7 @@ public class TemplateDemo {
       logger.log(Level.INFO, "Creating template.....");
       Template template = openshiftClient.templates()
           .inNamespace(namespace)
-          .load(new FileInputStream(templateFilePath)).get();
+          .load(new FileInputStream(templateFilePath)).item();
       openshiftClient.templates().inNamespace(namespace).resource(template).create();
       logger.log(Level.INFO, "Created template");
 

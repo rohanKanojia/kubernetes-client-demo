@@ -20,7 +20,7 @@ public class RollingUpdateDemo {
 		try (KubernetesClient client = new KubernetesClientBuilder().build()) {
 			Deployment aDeployment = client.apps().deployments()
 					.inNamespace(namespace)
-					.load(RollingUpdateDemo.class.getResourceAsStream(redisYamlFile)).get();
+					.load(RollingUpdateDemo.class.getResourceAsStream(redisYamlFile)).item();
 
 			client.apps().deployments().inNamespace(namespace)
 					.resource(aDeployment)

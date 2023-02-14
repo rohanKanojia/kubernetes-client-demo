@@ -11,7 +11,7 @@ public class DeleteReadinessProbe {
     try (KubernetesClient client = new KubernetesClientBuilder().build()) {
       Deployment deploymentWithReadinessProbe = client.apps().deployments()
         .load(DeleteReadinessProbe.class.getResourceAsStream("/deployment-with-readinessprobe.yml"))
-        .get();
+        .item();
 
       client.apps().deployments().inNamespace("default").resource(deploymentWithReadinessProbe).createOrReplace();
 

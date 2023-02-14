@@ -37,7 +37,7 @@ public class PodDemo {
 			/*
 			 * Creating pod from yaml file
 			 */
-			Pod pod2 = client.pods().inNamespace(namespace).load(PodDemo.class.getResourceAsStream("/test-redis.yml")).get();
+			Pod pod2 = client.pods().inNamespace(namespace).load(PodDemo.class.getResourceAsStream("/test-redis.yml")).item();
 			client.pods().inNamespace(namespace).resource(pod2).create();
 			logger.log(Level.INFO, "created " + pod2.getMetadata().getName());
 
