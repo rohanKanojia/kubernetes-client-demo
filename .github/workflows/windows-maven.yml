@@ -21,4 +21,4 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
       - name: Build Project
-        run: mvn clean install -fparent
+        run: mvn clean install -fkubernetes-client-demo-parent
