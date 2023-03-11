@@ -22,7 +22,7 @@ public class PrometheusRuleTest {
                     .endSpec()
                     .build();
 
-            client.monitoring().prometheusRules().inNamespace("rokumar").resource(prometheusRule).createOrReplace();
+            client.monitoring().prometheusRules().inNamespace("rokumar").resource(prometheusRule).create();
             System.out.println("Created");
 
             PrometheusRuleList prometheusRuleList = client.monitoring().prometheusRules().inNamespace("rokumar").list();

@@ -28,7 +28,7 @@ public class EgressNetworkPolicyTest {
                     .endEgress()
                     .endSpec()
                     .build();
-            client.egressNetworkPolicies().inNamespace("default").resource(enp).createOrReplace();
+            client.egressNetworkPolicies().inNamespace("default").resource(enp).create();
             System.out.println("Created");
             client.egressNetworkPolicies().inNamespace("default").withName("foo").delete();
             System.out.println("Deleted");

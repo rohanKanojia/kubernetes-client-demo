@@ -97,7 +97,7 @@ public class RawCustomResourcesDemoBlog {
             client.genericKubernetesResources(animalCrdContext)
                 .inNamespace(namespace)
                 .resource(oldAnimal)
-                .replace();
+                .update();
 
             // Update using patch
             client.genericKubernetesResources(animalCrdContext)

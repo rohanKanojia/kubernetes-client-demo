@@ -29,7 +29,7 @@ public class ClusterResourceQuotaTest {
                     .endSpec()
                     .build();
 
-            client.quotas().clusterResourceQuotas().resource(acrq).createOrReplace();
+            client.quotas().clusterResourceQuotas().resource(acrq).create();
 
             ClusterResourceQuotaList clusterResourceQuotaList = client.quotas().clusterResourceQuotas().list();
             client.quotas().clusterResourceQuotas().withName("foo").delete();

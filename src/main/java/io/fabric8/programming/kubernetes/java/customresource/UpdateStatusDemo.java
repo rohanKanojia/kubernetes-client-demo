@@ -26,7 +26,7 @@ public class UpdateStatusDemo {
 
       // Update Status
       book1.setStatus(book1Status);
-      bookOp.inNamespace("default").resource(book1).replaceStatus();
+      bookOp.inNamespace("default").resource(book1).updateStatus();
     }
   }
 }

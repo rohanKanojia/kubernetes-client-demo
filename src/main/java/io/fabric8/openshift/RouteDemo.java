@@ -29,7 +29,7 @@ public class RouteDemo {
                     .endSpec()
                     .build();
 
-            client.routes().inNamespace("rokumar").resource(route1).createOrReplace();
+            client.routes().inNamespace("rokumar").resource(route1).create();
         } catch (KubernetesClientException aException) {
             logger.log(Level.SEVERE, "Problem encountered in Kubernetes Client");
             aException.printStackTrace();

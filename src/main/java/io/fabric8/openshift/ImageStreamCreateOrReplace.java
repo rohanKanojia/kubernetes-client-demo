@@ -12,11 +12,11 @@ public class ImageStreamCreateOrReplace {
                     .load(ImageStreamCreateOrReplace.class.getResourceAsStream("/test-imagestream.yml"))
                     .get();
 
-            client.imageStreams().inNamespace("myproject").resource(imageStream).createOrReplace();
+            client.imageStreams().inNamespace("myproject").resource(imageStream).serverSideApply();
 
             imageStream.getSpec().setDockerImageRepository("docker.io/openshift/ruby-20");
 
-            client.imageStreams().inNamespace("myproject").resource(imageStream).createOrReplace();
+            client.imageStreams().inNamespace("myproject").resource(imageStream).serverSideApply();
         }
     }
 }

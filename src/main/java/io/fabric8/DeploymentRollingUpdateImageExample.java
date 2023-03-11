@@ -9,7 +9,6 @@ public class DeploymentRollingUpdateImageExample {
             client.apps().deployments()
                     .inNamespace("default")
                     .withName("hello-dep")
-                    .rolling()
                     .updateImage("gcr.io/google-samples/hello-app:2.0");
         }
     }

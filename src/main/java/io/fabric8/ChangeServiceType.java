@@ -15,7 +15,7 @@ public class ChangeServiceType {
             svc.getSpec().setType("ExternalName");
             svc.getSpec().setExternalName("my.database.example.com");
             svc.getSpec().setClusterIP("");
-            svc = client.services().inNamespace("default").resource(svc).replace();
+            svc = client.services().inNamespace("default").resource(svc).update();
 
         }
     }

@@ -46,7 +46,7 @@ public class SparkApplicationCustomResource {
 
             sparkCustomResource.setAdditionalProperties(Collections.singletonMap("spec", sparkCustomResourceSpec));
 
-            client.genericKubernetesResources(customResourceDefinitionContext).inNamespace("default").resource(sparkCustomResource).replace();
+            client.genericKubernetesResources(customResourceDefinitionContext).inNamespace("default").resource(sparkCustomResource).update();
             log("Edition of custom resource successful.");
 
         }

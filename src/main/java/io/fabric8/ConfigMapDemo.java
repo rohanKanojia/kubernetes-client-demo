@@ -30,7 +30,7 @@ public class ConfigMapDemo {
 					.build();
 
 			logger.log(Level.INFO, "Creating config map");
-			client.configMaps().inNamespace(namespace).resource(configMap1).createOrReplace();
+			client.configMaps().inNamespace(namespace).resource(configMap1).create();
 			logger.log(Level.INFO, "OK .. ConfigMap successfully created");
 
 			/*

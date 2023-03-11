@@ -23,7 +23,6 @@ public class StatefulSetRolloutExample {
         client.apps().statefulSets()
                 .inNamespace("default")
                 .withName("web")
-                .rolling()
                 .updateImage("nginx:1.19");
     }
 
@@ -31,7 +30,6 @@ public class StatefulSetRolloutExample {
         client.apps().statefulSets()
                 .inNamespace("default")
                 .withName("web")
-                .rolling()
                 .updateImage(params);
     }
 

@@ -15,7 +15,6 @@ public class DeploymentRollingUpdateMultipleContainers {
             client.apps().deployments()
                     .inNamespace("default")
                     .withName("multi-container-deploy")
-                    .rolling()
                     .updateImage(containerToImageMap);
         }
     }

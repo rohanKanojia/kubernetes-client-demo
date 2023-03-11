@@ -21,9 +21,9 @@ public class ServiceCreateOrReplace {
                     .endSpec()
                     .build();
 
-            Service svc1 = client.services().inNamespace("rokumar").resource(svc).createOrReplace();
+            Service svc1 = client.services().inNamespace("rokumar").resource(svc).serverSideApply();
             System.out.println(svc1.getSpec().getPorts().get(0).getNodePort());
-            Service svc2 = client.services().inNamespace("rokumar").resource(svc).createOrReplace();
+            Service svc2 = client.services().inNamespace("rokumar").resource(svc).serverSideApply();
             System.out.println(svc2.getSpec().getPorts().get(0).getNodePort());
         }
     }

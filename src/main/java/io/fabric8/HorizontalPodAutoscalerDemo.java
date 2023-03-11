@@ -1,6 +1,5 @@
 package io.fabric8;
 
-import io.fabric8.kubernetes.api.model.Quantity;
 import io.fabric8.kubernetes.api.model.autoscaling.v1.HorizontalPodAutoscaler;
 import io.fabric8.kubernetes.api.model.autoscaling.v1.HorizontalPodAutoscalerBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -12,7 +11,7 @@ public class HorizontalPodAutoscalerDemo {
       HorizontalPodAutoscaler hpa = createHPA();
       client.autoscaling().v1().horizontalPodAutoscalers()
           .resource(hpa)
-          .createOrReplace();
+          .create();
       System.out.println(hpa.getMetadata().getName() + " created!");
 
       client.autoscaling().v1().horizontalPodAutoscalers()

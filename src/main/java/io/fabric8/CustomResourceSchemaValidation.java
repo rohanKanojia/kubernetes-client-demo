@@ -44,10 +44,10 @@ public class CustomResourceSchemaValidation {
                 .build();
 
         try (KubernetesClient client = new KubernetesClientBuilder().build()) {
-            client.apiextensions().v1beta1().customResourceDefinitions().resource(customResourceDefinition).createOrReplace();
+            client.apiextensions().v1beta1().customResourceDefinitions().resource(customResourceDefinition).serverSideApply();
             logger.log(Level.INFO, "CRD created once");
             // This will always fail
-            client.apiextensions().v1beta1().customResourceDefinitions().resource(customResourceDefinition).createOrReplace();
+            client.apiextensions().v1beta1().customResourceDefinitions().resource(customResourceDefinition).serverSideApply();
             logger.log(Level.INFO, "CRD created twice");
         }
 //        // To make this test idempotent

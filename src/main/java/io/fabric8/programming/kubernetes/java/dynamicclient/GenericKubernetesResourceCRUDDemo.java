@@ -50,7 +50,7 @@ public class GenericKubernetesResourceCRUDDemo {
       Map<String, Object> additionalProperties = genericKubernetesResource.getAdditionalProperties();
       Map<String, Object> spec = (Map<String, Object>) additionalProperties.get("spec");
       spec.put("image", "my-updated-cron-image");
-      client.genericKubernetesResources(context).inNamespace("default").resource(genericKubernetesResource).replace();
+      client.genericKubernetesResources(context).inNamespace("default").resource(genericKubernetesResource).update();
 
       // Delete
       client.genericKubernetesResources(context).inNamespace("default").resource(genericKubernetesResource).delete();

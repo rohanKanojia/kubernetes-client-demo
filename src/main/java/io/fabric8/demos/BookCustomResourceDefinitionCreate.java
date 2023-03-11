@@ -10,7 +10,7 @@ public class BookCustomResourceDefinitionCreate {
             CustomResourceDefinition crd = client.apiextensions().v1().customResourceDefinitions()
                     .load(BookCustomResourceDefinitionCreate.class.getResourceAsStream("/book-crd.yaml"))
                     .get();
-            client.apiextensions().v1().customResourceDefinitions().resource(crd).createOrReplace();
+            client.apiextensions().v1().customResourceDefinitions().resource(crd).create();
         }
     }
 }

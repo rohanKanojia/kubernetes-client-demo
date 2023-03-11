@@ -25,7 +25,7 @@ public class JobCreateExample {
                     .endSpec()
                     .build();
 
-            client.batch().v1().jobs().inNamespace("default").resource(job).createOrReplace();
+            client.batch().v1().jobs().inNamespace("default").resource(job).create();
         }
     }
 }

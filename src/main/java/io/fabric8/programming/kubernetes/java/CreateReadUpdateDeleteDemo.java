@@ -35,7 +35,7 @@ public class CreateReadUpdateDeleteDemo {
       client.services()
           .inNamespace("default")
           .resource(svc)
-          .replace();
+          .update();
 
       // Delete Service
       client.services()

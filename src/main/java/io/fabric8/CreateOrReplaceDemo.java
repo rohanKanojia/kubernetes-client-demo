@@ -42,7 +42,7 @@ public class CreateOrReplaceDemo {
                     .build();
 
             logger.info("2. Applying list onto cluster...");
-            client.resourceList(list).inNamespace(namespace).createOrReplace();
+            client.resourceList(list).inNamespace(namespace).create();
 
             logger.info("3. Modifying service to use new port ...");
             service.getSpec().getPorts().get(0).setTargetPort(new IntOrString(9999));
@@ -50,7 +50,7 @@ public class CreateOrReplaceDemo {
             list.getItems().add(service);
 
             logger.info("4. Applying updated list...");
-            client.resourceList(list).inNamespace(namespace).createOrReplace();
+            client.resourceList(list).inNamespace(namespace).update();
 
             logger.info("5. Deleting existing resources...");
             client.resourceList(list).inNamespace(namespace).delete();

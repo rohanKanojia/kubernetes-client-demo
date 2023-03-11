@@ -9,7 +9,7 @@ public class RouteCreateOrReplace {
         try (OpenShiftClient client = new KubernetesClientBuilder().build().adapt(OpenShiftClient.class)) {
             Route aRoute = client.routes().inNamespace("rokumar").withName("weather-web-application").get();
             aRoute.getMetadata().getAnnotations().put("foo", "bar");
-            client.routes().inNamespace("rokumar").resource(aRoute).createOrReplace();
+            client.routes().inNamespace("rokumar").resource(aRoute).serverSideApply();
         }
     }
 }

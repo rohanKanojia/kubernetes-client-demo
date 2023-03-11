@@ -12,7 +12,7 @@ public class LoadAndCreateService {
                     .load(LoadAndCreateService.class.getResourceAsStream("/test-svc.yaml"))
                     .get();
 
-            client.services().inNamespace("rokumar").resource(svc).createOrReplace();
+            client.services().inNamespace("rokumar").resource(svc).create();
         }
 
         

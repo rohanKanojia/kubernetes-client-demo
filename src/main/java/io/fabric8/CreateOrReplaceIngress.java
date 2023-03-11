@@ -17,7 +17,7 @@ public class CreateOrReplaceIngress {
             annotations.put("foo", "bar");
             meta.setAnnotations(annotations);
             ing.setMetadata(meta);
-            client.network().v1().ingresses().inNamespace("default").resource(ing).createOrReplace();
+            client.network().v1().ingresses().inNamespace("default").resource(ing).serverSideApply();
         }
     }
 }

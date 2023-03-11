@@ -16,7 +16,7 @@ public class SecretPatchDeleteKey {
           .addToData("passwd", "c2VjcmV0Cg==")
           .build();
 
-      client.secrets().inNamespace("default").resource(secret).createOrReplace();
+      client.secrets().inNamespace("default").resource(secret).create();
 
       client.secrets()
           .inNamespace("default")

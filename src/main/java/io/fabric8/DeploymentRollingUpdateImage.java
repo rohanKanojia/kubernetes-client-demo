@@ -21,7 +21,6 @@ try (KubernetesClient client = new KubernetesClientBuilder().build()) {
     client.apps().deployments()
             .inNamespace(namespace)
             .withName(deployment.getMetadata().getName())
-            .rolling()
             .updateImage("gcr.io/google-samples/hello-app:2.0");
 
 //    rollingUpdateMultiContainerDeployment(client, namespace);
@@ -40,7 +39,6 @@ try (KubernetesClient client = new KubernetesClientBuilder().build()) {
         client.apps().deployments()
                 .inNamespace(namespace)
                 .withName("multi-container-deploy")
-                .rolling()
                 .updateImage(containerToImageMap);
     }
 

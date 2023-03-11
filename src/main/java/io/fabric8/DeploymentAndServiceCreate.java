@@ -14,11 +14,11 @@ public class DeploymentAndServiceCreate {
             // Create Deployment
             String namespace = "default";
             Deployment deployment = createNewDeployment("hello-dep");
-            client.apps().deployments().inNamespace(namespace).resource(deployment).createOrReplace();
+            client.apps().deployments().inNamespace(namespace).resource(deployment).serverSideApply();
 
             // Create Service
             Service service = createNewService("hello-dep");
-            client.services().inNamespace(namespace).resource(service).createOrReplace();
+            client.services().inNamespace(namespace).resource(service).serverSideApply();
 
         }
     }

@@ -13,7 +13,7 @@ public class DeleteReadinessProbe {
         .load(DeleteReadinessProbe.class.getResourceAsStream("/deployment-with-readinessprobe.yml"))
         .item();
 
-      client.apps().deployments().inNamespace("default").resource(deploymentWithReadinessProbe).createOrReplace();
+      client.apps().deployments().inNamespace("default").resource(deploymentWithReadinessProbe).serverSideApply();
 
       client.apps().deployments()
         .inNamespace("default")

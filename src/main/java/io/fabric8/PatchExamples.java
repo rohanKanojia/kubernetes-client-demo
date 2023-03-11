@@ -21,7 +21,7 @@ public class PatchExamples {
       deployment = kubernetesClient.apps().deployments()
           .inNamespace("default")
           .resource(deployment)
-          .createOrReplace();
+          .create();
 
       standardPatchTyped(kubernetesClient, deployment);
       patchStrategicMerge(kubernetesClient, deployment);

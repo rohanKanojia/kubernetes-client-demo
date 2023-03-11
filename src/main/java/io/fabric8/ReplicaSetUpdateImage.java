@@ -9,7 +9,6 @@ public class ReplicaSetUpdateImage {
             client.apps().replicaSets()
                     .inNamespace("default")
                     .withName("soaktestrs")
-                    .rolling()
                     .updateImage("nickchase/soaktest");
         }
     }

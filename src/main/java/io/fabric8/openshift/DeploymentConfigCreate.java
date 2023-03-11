@@ -8,7 +8,7 @@ public class DeploymentConfigCreate {
     public static void main(String[] args) {
         try (OpenShiftClient client = new KubernetesClientBuilder().build().adapt(OpenShiftClient.class)) {
             DeploymentConfig deploymentConfig = client.deploymentConfigs().load(DeploymentConfigCreate.class.getResourceAsStream("/test-dc.yml")).item();
-            client.deploymentConfigs().inNamespace("rokumar").resource(deploymentConfig).createOrReplace();
+            client.deploymentConfigs().inNamespace("rokumar").resource(deploymentConfig).serverSideApply();
         }
     }
 }

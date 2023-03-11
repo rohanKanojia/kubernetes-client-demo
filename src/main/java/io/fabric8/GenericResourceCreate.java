@@ -11,7 +11,7 @@ public class GenericResourceCreate {
                     .load(GenericResourceCreate.class.getResourceAsStream("/nginx-deployment.yml"))
                     .get();
 
-            client.resource(deployment).createOrReplace();
+            client.resource(deployment).create();
         }
     }
 }

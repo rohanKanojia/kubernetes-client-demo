@@ -24,7 +24,7 @@ public class CreateOrReplaceConfigMap {
         try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             ConfigMap newResource = getOriginalCM();
             client.configMaps().inNamespace(NAMESPACE).resource(newResource).create();
-            client.configMaps().inNamespace(NAMESPACE).resource(newResource).createOrReplace();
+            client.configMaps().inNamespace(NAMESPACE).resource(newResource).serverSideApply();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

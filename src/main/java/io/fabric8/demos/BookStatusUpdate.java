@@ -21,7 +21,7 @@ public class BookStatusUpdate {
 
             // Update Book Status
             book.setStatus(createBookStatus(true, "Rohan Kumar"));
-            bookClient.inNamespace("default").resource(book).replaceStatus();
+            bookClient.inNamespace("default").resource(book).updateStatus();
         }
     }
 

@@ -27,7 +27,7 @@ public class ServiceMonitorTest {
                     .endSpec()
                     .build();
 
-            client.monitoring().serviceMonitors().inNamespace("rokumar").resource(serviceMonitor).createOrReplace();
+            client.monitoring().serviceMonitors().inNamespace("rokumar").resource(serviceMonitor).create();
             System.out.println("created");
 
             ServiceMonitorList serviceMonitorList = client.monitoring().serviceMonitors().inNamespace("rokumar").list();

@@ -15,7 +15,7 @@ public class UpdateMultipleImagesDeployment {
             updatedImages.put("hello-kubernetes", "paulbouwer/hello-kubernetes:1.8");
 
             client.apps().deployments().inNamespace(namespace).withName("hello-kubernetes")
-                    .rolling().updateImage(updatedImages);
+                    .updateImage(updatedImages);
         }
     }
 }

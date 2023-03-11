@@ -18,7 +18,7 @@ public class CatalogSourceTest {
                     .withPublisher("Fabric8")
                     .endSpec()
                     .build();
-            client.operatorHub().catalogSources().inNamespace("default").resource(cs).createOrReplace();
+            client.operatorHub().catalogSources().inNamespace("default").resource(cs).serverSideApply();
             System.out.println("Created.");
 
             CatalogSourceList csList = client.operatorHub().catalogSources().inNamespace("default").withLabel("foo", "bar").list();

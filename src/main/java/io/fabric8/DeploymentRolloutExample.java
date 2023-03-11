@@ -27,7 +27,7 @@ public class DeploymentRolloutExample {
     try (KubernetesClient client = new KubernetesClientBuilder().build()) {
       client.apps().deployments().inNamespace("default")
               .withName("nginx-deployment")
-              .rolling().updateImage("nginx:latest");
+              .updateImage("nginx:latest");
       logger.info("Deployment rolled out");
     }
   }

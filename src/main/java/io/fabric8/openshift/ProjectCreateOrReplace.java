@@ -12,7 +12,7 @@ public class ProjectCreateOrReplace {
                     .withNewMetadata().withName("this-is-a-test").endMetadata()
                     .build();
 
-            client.projects().resource(project).createOrReplace();
+            client.projects().resource(project).serverSideApply();
         }
     }
 }

@@ -26,7 +26,7 @@ public class CustomResourceStatusTest {
             newStatus.setLabelSelector("foobar");
             cronTab.setStatus(newStatus);
 
-            CronTab updatedCronTab = cronTabClient.inNamespace("default").resource(cronTab).replaceStatus();
+            CronTab updatedCronTab = cronTabClient.inNamespace("default").resource(cronTab).updateStatus();
             log(updatedCronTab.getStatus().getLabelSelector());
         }
     }

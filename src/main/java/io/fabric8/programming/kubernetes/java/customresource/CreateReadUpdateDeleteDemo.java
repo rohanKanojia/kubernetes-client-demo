@@ -36,7 +36,7 @@ public class CreateReadUpdateDeleteDemo {
 
       // Update
       book1.getSpec().setAuthor("Kathy Sierra, Bert Bates, Trisha Gee");
-      bookOp.inNamespace("default").resource(book1).replace();
+      bookOp.inNamespace("default").resource(book1).update();
 
       // Delete
       bookOp.inNamespace("default").resource(book1).delete();

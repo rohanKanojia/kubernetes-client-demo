@@ -12,7 +12,8 @@ public class NamespaceCreateOrReplace {
                     .withNewMetadata().withName("this-is-a-test").endMetadata()
                     .build();
 
-            client.namespaces().resource(namespace).createOrReplace();
+            client.namespaces().resource(namespace).serverSideApply();
+            System.out.println("Done");
         }
     }
 }

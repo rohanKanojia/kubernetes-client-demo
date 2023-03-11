@@ -9,7 +9,6 @@ public class ReplicationControllerUpdateImage {
             client.replicationControllers()
                     .inNamespace("default")
                     .withName("nginx")
-                    .rolling()
                     .updateImage("nginx:latest");
         }
     }

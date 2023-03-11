@@ -8,7 +8,7 @@ public class CreateOrReplaceResource {
     public static void main(String[] args) {
         try (KubernetesClient client = new KubernetesClientBuilder().build()) {
             Pod pod = client.pods().load(CreateOrReplaceResource.class.getResourceAsStream("/test-pod.yml")).item();
-            client.resource(pod).inNamespace("default").createOrReplace();
+            client.resource(pod).inNamespace("default").serverSideApply();
         }
     }
 }

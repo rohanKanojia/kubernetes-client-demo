@@ -33,7 +33,7 @@ public class ExecDemo {
 					.withValue("password").endEnv().endContainer().endSpec()
 					.build();
 			
-			client.pods().inNamespace(namespace).resource(pod1).createOrReplace();
+			client.pods().inNamespace(namespace).resource(pod1).create();
 			logger.log(Level.INFO, "created pod");
 
 			logger.log(Level.INFO, "Waiting for the pod to start");
