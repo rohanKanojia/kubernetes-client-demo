@@ -17,7 +17,7 @@
     <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>3.0.0-M7</maven-failsafe-plugin.version>
     <junit.version>5.9.1</junit.version>
-    <fabric8.version>6.7.1</fabric8.version>
+    <fabric8.version>6.7.2</fabric8.version>
   </properties>
 
   <modules>
