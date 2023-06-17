@@ -1,7 +1,5 @@
 package io.fabric8;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import io.fabric8.kubernetes.api.model.GenericKubernetesResource;
 import io.fabric8.kubernetes.api.model.GenericKubernetesResourceBuilder;
 import io.fabric8.kubernetes.api.model.GenericKubernetesResourceList;
@@ -74,7 +72,7 @@ public class RawCustomResourcesDemoBlog {
                 "    \"image\": \"my-silly-mongoose-image\"" +
                 "  }" +
                 "}";
-            GenericKubernetesResource cr3 = Serialization.jsonMapper().readValue(crBasicString, GenericKubernetesResource.class);
+            GenericKubernetesResource cr3 = Serialization.unmarshal(crBasicString, GenericKubernetesResource.class);
             client.genericKubernetesResources(animalCrdContext).inNamespace(namespace).resource(cr3).create();
 
 
@@ -140,10 +138,6 @@ public class RawCustomResourcesDemoBlog {
                 log("Timed out");
             }
             watch.close();
-        } catch (JsonMappingException e) {
-            throw new RuntimeException("encountered JsonMappingException ", e);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         }
     }
 

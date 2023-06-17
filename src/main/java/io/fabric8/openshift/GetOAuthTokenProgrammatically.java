@@ -16,7 +16,7 @@ public class GetOAuthTokenProgrammatically {
         // Gets KubeConfig via reading KUBECONFIG environment variable or ~/.kube/config
         File kubeConfigFile = new File(io.fabric8.kubernetes.client.Config.getKubeconfigFilename());
 
-        io.fabric8.kubernetes.api.model.Config config = Serialization.unmarshal(new FileInputStream(kubeConfigFile));
+        io.fabric8.kubernetes.api.model.Config config = Serialization.unmarshal(new FileInputStream(kubeConfigFile), io.fabric8.kubernetes.api.model.Config.class);
 
         return config.getUsers()
                 .stream()
