@@ -1,9 +1,9 @@
 package io.fabric8;
 
 import io.fabric8.kubernetes.api.model.ObjectMeta;
-import io.fabric8.kubernetes.api.model.resource.v1alpha1.ResourceClaim;
-import io.fabric8.kubernetes.api.model.resource.v1alpha1.ResourceClaimBuilder;
-import io.fabric8.kubernetes.api.model.resource.v1alpha1.ResourceClaimList;
+import io.fabric8.kubernetes.api.model.resource.v1alpha2.ResourceClaim;
+import io.fabric8.kubernetes.api.model.resource.v1alpha2.ResourceClaimBuilder;
+import io.fabric8.kubernetes.api.model.resource.v1alpha2.ResourceClaimList;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 
@@ -28,14 +28,14 @@ public class ResourceClaimDemo {
           .build();
 
       client.dynamicResourceAllocation()
-          .v1alpha1()
+          .v1alpha2()
           .resourceClaims()
           .inNamespace("default")
           .resource(ps)
           .create();
 
       ResourceClaimList psList = client.dynamicResourceAllocation()
-          .v1alpha1()
+          .v1alpha2()
           .resourceClaims()
           .inNamespace("default")
           .list();

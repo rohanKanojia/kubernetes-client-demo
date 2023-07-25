@@ -3,9 +3,9 @@ package io.fabric8;
 import io.fabric8.kubernetes.api.model.NodeSelectorBuilder;
 import io.fabric8.kubernetes.api.model.NodeSelectorRequirementBuilder;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
-import io.fabric8.kubernetes.api.model.resource.v1alpha1.ResourceClass;
-import io.fabric8.kubernetes.api.model.resource.v1alpha1.ResourceClassBuilder;
-import io.fabric8.kubernetes.api.model.resource.v1alpha1.ResourceClassList;
+import io.fabric8.kubernetes.api.model.resource.v1alpha2.ResourceClass;
+import io.fabric8.kubernetes.api.model.resource.v1alpha2.ResourceClassBuilder;
+import io.fabric8.kubernetes.api.model.resource.v1alpha2.ResourceClassList;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 
@@ -41,13 +41,13 @@ public class ResourceClassDemo {
           .build();
 
       client.dynamicResourceAllocation()
-          .v1alpha1()
+          .v1alpha2()
           .resourceClasses()
           .resource(ps)
           .create();
 
       ResourceClassList psList = client.dynamicResourceAllocation()
-          .v1alpha1()
+          .v1alpha2()
           .resourceClasses()
           .list();
       System.out.printf("Found %s ResourceClass items%n", psList.getItems().size());

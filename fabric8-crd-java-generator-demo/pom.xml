@@ -13,8 +13,8 @@
 
     <properties>
         <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
-        <sundrio.version>0.93.2</sundrio.version>
-        <lombok.version>1.18.24</lombok.version>
+        <sundrio.version>0.100.1</sundrio.version>
+        <lombok.version>1.18.28</lombok.version>
     </properties>
 
     <dependencies>

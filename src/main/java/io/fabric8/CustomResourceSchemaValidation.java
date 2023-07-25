@@ -3,7 +3,6 @@ package io.fabric8;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinition;
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinitionBuilder;
-import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.CustomResourceDefinitionFluent;
 import io.fabric8.kubernetes.api.model.apiextensions.v1beta1.JSONSchemaProps;
 import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -23,8 +22,7 @@ public class CustomResourceSchemaValidation {
 
         final JSONSchemaProps jsonSchemaProps = mapper.readValue(resource, JSONSchemaProps.class);
 
-        final CustomResourceDefinitionFluent.SpecNested<CustomResourceDefinitionBuilder> crdBuilder = new CustomResourceDefinitionBuilder()
-                .withApiVersion("apiextensions.k8s.io/v1beta1")
+        final CustomResourceDefinition customResourceDefinition = new CustomResourceDefinitionBuilder()
                 .withNewMetadata()
                 .withName("somethings.example.com")
                 .endMetadata()
@@ -35,8 +33,7 @@ public class CustomResourceSchemaValidation {
                 .withShortNames(Collections.singletonList("ex")).endNames()
                 .withGroup("example.com")
                 .withVersion("v1")
-                .withScope("Namespaced");
-        final CustomResourceDefinition customResourceDefinition = crdBuilder
+                .withScope("Namespaced")
                 .withNewValidation()
                 .withOpenAPIV3Schema(jsonSchemaProps)
                 .endValidation()
