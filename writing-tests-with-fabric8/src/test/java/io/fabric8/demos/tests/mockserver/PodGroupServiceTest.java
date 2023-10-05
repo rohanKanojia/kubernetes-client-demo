@@ -116,7 +116,7 @@ class PodGroupServiceTest {
     PodGroupService podGroupService = new PodGroupService(kubernetesClient, Collections.singletonMap("foo", "bar"));
     CountDownLatch eventReceivedLatch = new CountDownLatch(1);
     server.expect()
-        .withPath("/api/v1/namespaces/test/pods?labelSelector=foo%3Dbar&allowWatchBookmarks=true&watch=true")
+        .withPath("/api/v1/namespaces/test/pods?allowWatchBookmarks=true&labelSelector=foo%3Dbar&watch=true")
         .andUpgradeToWebSocket()
         .open()
         .waitFor(50)

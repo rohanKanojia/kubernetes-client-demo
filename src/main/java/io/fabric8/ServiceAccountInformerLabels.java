@@ -11,26 +11,26 @@ import java.util.Collections;
 public class ServiceAccountInformerLabels {
     public static void main(String[] args) {
         try (KubernetesClient client = new KubernetesClientBuilder().build()) {
-            SharedIndexInformer<ServiceAccount> serviceAccountSharedIndexInformer = client.serviceAccounts().withLabels(Collections.singletonMap("foo", "bar")).inform(new ResourceEventHandler<ServiceAccount>() {
-                @Override
-                public void onAdd(ServiceAccount serviceAccount) {
-                    System.out.printf("ADDED %s/%s\n", serviceAccount.getMetadata().getNamespace(), serviceAccount.getMetadata().getName());
-                }
+            SharedIndexInformer<ServiceAccount> serviceAccountSharedIndexInformer = client.serviceAccounts().withLabels(Collections.singletonMap("foo", "bar")).inform(new ResourceEventHandler<>() {
+              @Override
+              public void onAdd(ServiceAccount serviceAccount) {
+                System.out.printf("ADDED %s/%s\n", serviceAccount.getMetadata().getNamespace(), serviceAccount.getMetadata().getName());
+              }
 
-                @Override
-                public void onUpdate(ServiceAccount serviceAccount, ServiceAccount t1) {
-                    System.out.printf("MODIFIED %s/%s\n", serviceAccount.getMetadata().getNamespace(), serviceAccount.getMetadata().getName());
+              @Override
+              public void onUpdate(ServiceAccount serviceAccount, ServiceAccount t1) {
+                System.out.printf("MODIFIED %s/%s\n", serviceAccount.getMetadata().getNamespace(), serviceAccount.getMetadata().getName());
 
-                }
+              }
 
-                @Override
-                public void onDelete(ServiceAccount serviceAccount, boolean b) {
-                    System.out.printf("DELETED %s/%s\n", serviceAccount.getMetadata().getNamespace(), serviceAccount.getMetadata().getName());
-                }
+              @Override
+              public void onDelete(ServiceAccount serviceAccount, boolean b) {
+                System.out.printf("DELETED %s/%s\n", serviceAccount.getMetadata().getNamespace(), serviceAccount.getMetadata().getName());
+              }
             });
 
             Thread.sleep(30 * 160 * 1000L);
-            serviceAccountSharedIndexInformer.stop();
+            serviceAccountSharedIndexInformer.close();
         } catch (InterruptedException interruptedException) {
             Thread.currentThread().interrupt();
             interruptedException.printStackTrace();
