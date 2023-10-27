@@ -22,7 +22,7 @@
         <commons-compress.version>1.21</commons-compress.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <slf4j-simple.version>1.7.28</slf4j-simple.version>
-        <json.version>20230227</json.version>
+        <json.version>20231013</json.version>
     </properties>
 
     <dependencies>
