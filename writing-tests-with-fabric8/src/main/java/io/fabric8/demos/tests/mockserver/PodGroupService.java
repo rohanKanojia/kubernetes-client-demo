@@ -35,7 +35,7 @@ public class PodGroupService {
     newLabels.putAll(matchLabels);
 
     newPod.getMetadata().setLabels(newLabels);
-    kubernetesClient.pods().resource(newPod).serverSideApply();
+    kubernetesClient.pods().resource(newPod).create();
   }
 
   public List<StatusDetails> delete() {
