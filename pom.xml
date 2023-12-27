@@ -18,8 +18,8 @@
 
     <properties>
         <version.fabric8.client>${fabric8.version}</version.fabric8.client>
-        <commons-codec.version>1.15</commons-codec.version>
-        <commons-compress.version>1.21</commons-compress.version>
+        <!-- Should be same as one required by Fabric8 K8s Client -->
+        <commons-compress.version>1.25.0</commons-compress.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <slf4j-simple.version>1.7.28</slf4j-simple.version>
         <json.version>20230227</json.version>
@@ -49,11 +49,6 @@
             <artifactId>openshift-server-mock</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${commons-codec.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
