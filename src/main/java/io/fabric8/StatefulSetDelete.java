@@ -9,6 +9,8 @@ import io.fabric8.kubernetes.api.model.PodTemplateSpecBuilder;
 import io.fabric8.kubernetes.api.model.QuantityBuilder;
 import io.fabric8.kubernetes.api.model.ResourceRequirements;
 import io.fabric8.kubernetes.api.model.ResourceRequirementsBuilder;
+import io.fabric8.kubernetes.api.model.VolumeResourceRequirements;
+import io.fabric8.kubernetes.api.model.VolumeResourceRequirementsBuilder;
 import io.fabric8.kubernetes.api.model.apps.StatefulSet;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetBuilder;
 import io.fabric8.kubernetes.api.model.apps.StatefulSetSpecBuilder;
@@ -57,7 +59,7 @@ public class StatefulSetDelete {
                 .endSpec()
                 .build();
 
-        final ResourceRequirements build = new ResourceRequirementsBuilder().withRequests(Collections.singletonMap(
+        final VolumeResourceRequirements build = new VolumeResourceRequirementsBuilder().withRequests(Collections.singletonMap(
                 "storage",
                 new QuantityBuilder().withAmount("1Mi").build())).build();
 
@@ -72,8 +74,7 @@ public class StatefulSetDelete {
                                 .endMetadata()
                                 .withNewSpec()
                                 .withAccessModes("ReadWriteOnce")
-                                .withResources(
-                                        build)
+                                .withResources(build)
                                 .endSpec()
                                 .build())
                         .withSelector(new LabelSelectorBuilder().withMatchLabels(Collections.singletonMap(
